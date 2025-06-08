@@ -8,12 +8,3 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
- @import "tailwindcss";
- @import "flowbite/src/themes/default";
-
- @plugin "flowbite/plugin";
-
- @source "../../../app/views/**/*.html.erb";
- @source "../../../app/views/**/*.rb";
- @source "../../../app/helpers/**/*.rb";
- @source "../../../node_modules/flowbite";
