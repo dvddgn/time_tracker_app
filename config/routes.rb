@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   # Authentication routes (added by generator)
   resource :session
   resources :passwords, param: :token
+  resource :registrations, only: [:new, :create]
 
   # Pages routes
   get "pages/home"
