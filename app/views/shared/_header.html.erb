@@ -22,6 +22,13 @@
           <li>
             <%= link_to "About Page", pages_about_path, class: "block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" %>
           </li>
+          <li>
+            <%= button_to session_path, 
+                method: :delete,
+                class: "block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" do %>
+              Sign out
+            <% end %>
+          </li>
         </ul>
       </div>
     </div>
