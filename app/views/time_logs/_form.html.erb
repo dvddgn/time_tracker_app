@@ -1,0 +1,180 @@
+<%= form_with model: @time_log, local: true, class: "space-y-6" do |form| %>
+  <!-- Error Messages -->
+  <% if @time_log.errors.any? %>
+    <div class="flex p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+      <svg class="flex-shrink-0 inline w-4 h-4 mr-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <span class="sr-only">Danger</span>
+      <div>
+        <span class="font-medium">Please fix the following errors:</span>
+        <ul class="mt-1.5 list-disc list-inside">
+          <% @time_log.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Category Selection -->
+  <div>
+    <%= form.label :category_id, "Category", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+    <%= form.collection_select :category_id, @categories, :id, :name, 
+        { prompt: "Select a category" }, 
+        { class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 #{'border-red-500 dark:border-red-500' if @time_log.errors[:category_id].any?}",
+          required: true } %>
+    <% if @time_log.errors[:category_id].any? %>
+      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+        <%= @time_log.errors[:category_id].first %>
+      </p>
+    <% end %>
+  </div>
+
+  <!-- Time Input Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Start Time -->
+    <div>
+      <%= form.label :start_time, "Start Time", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+      <%= form.datetime_local_field :start_time, 
+          value: (@time_log.start_time&.strftime("%Y-%m-%dT%H:%M")),
+          class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 #{'border-red-500 dark:border-red-500' if @time_log.errors[:start_time].any?}",
+          required: true %>
+      <% if @time_log.errors[:start_time].any? %>
+        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          <%= @time_log.errors[:start_time].first %>
+        </p>
+      <% end %>
+    </div>
+
+    <!-- End Time -->
+    <div>
+      <%= form.label :end_time, "End Time", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+      <%= form.datetime_local_field :end_time, 
+          value: (@time_log.end_time&.strftime("%Y-%m-%dT%H:%M")),
+          class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 #{'border-red-500 dark:border-red-500' if @time_log.errors[:end_time].any?}" %>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Leave empty to track ongoing time</p>
+      <% if @time_log.errors[:end_time].any? %>
+        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          <%= @time_log.errors[:end_time].first %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Duration Preview (JavaScript will calculate this) -->
+  <div id="duration-preview" class="hidden">
+    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900 dark:border-blue-700">
+      <div class="flex items-center">
+        <svg class="w-4 h-4 text-blue-600 dark:text-blue-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 9V6a1 1 0 112 0v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3z"/>
+        </svg>
+        <span class="text-sm font-medium text-blue-800 dark:text-blue-200">
+          Duration: <span id="calculated-duration">--</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Field -->
+  <div>
+    <%= form.label :notes, "Notes", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+    <%= form.text_area :notes,
+        rows: 4,
+        class: "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+        placeholder: "What did you work on? (optional)" %>
+    <% if @time_log.errors[:notes].any? %>
+      <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+        <%= @time_log.errors[:notes].first %>
+      </p>
+    <% end %>
+  </div>
+
+  <!-- Quick Time Buttons -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <button type="button" onclick="setQuickTime(15)" class="px-3 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+      15 min
+    </button>
+    <button type="button" onclick="setQuickTime(30)" class="px-3 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+      30 min
+    </button>
+    <button type="button" onclick="setQuickTime(60)" class="px-3 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+      1 hour
+    </button>
+    <button type="button" onclick="setQuickTime(120)" class="px-3 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+      2 hours
+    </button>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex items-center space-x-4">
+    <%= link_to "Cancel", time_logs_path, 
+        class: "px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600" %>
+    <%= form.submit (@time_log.persisted? ? "Update Time Log" : "Save Time Log"), 
+        class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
+  </div>
+<% end %>
+
+<!-- JavaScript for duration calculation and quick time buttons -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const startTimeInput = document.getElementById('time_log_start_time');
+  const endTimeInput = document.getElementById('time_log_end_time');
+  const durationPreview = document.getElementById('duration-preview');
+  const calculatedDuration = document.getElementById('calculated-duration');
+  
+  function calculateDuration() {
+    const startTime = startTimeInput.value;
+    const endTime = endTimeInput.value;
+    
+    if (startTime && endTime) {
+      const start = new Date(startTime);
+      const end = new Date(endTime);
+      const diffMs = end - start;
+      
+      if (diffMs > 0) {
+        const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        
+        let durationText = '';
+        if (hours > 0) {
+          durationText += hours + 'h ';
+        }
+        if (minutes > 0) {
+          durationText += minutes + 'm';
+        }
+        if (durationText === '') {
+          durationText = 'Less than 1 minute';
+        }
+        
+        calculatedDuration.textContent = durationText.trim();
+        durationPreview.classList.remove('hidden');
+      } else {
+        durationPreview.classList.add('hidden');
+      }
+    } else {
+      durationPreview.classList.add('hidden');
+    }
+  }
+  
+  startTimeInput.addEventListener('change', calculateDuration);
+  endTimeInput.addEventListener('change', calculateDuration);
+  
+  // Calculate on page load if values exist
+  calculateDuration();
+});
+
+function setQuickTime(minutes) {
+  const now = new Date();
+  const startTime = new Date(now.getTime() - (minutes * 60 * 1000));
+  
+  const startInput = document.getElementById('time_log_start_time');
+  const endInput = document.getElementById('time_log_end_time');
+  
+  startInput.value = startTime.toISOString().slice(0, 16);
+  endInput.value = now.toISOString().slice(0, 16);
+  
+  // Trigger duration calculation
+  startInput.dispatchEvent(new Event('change'));
+}
+</script>

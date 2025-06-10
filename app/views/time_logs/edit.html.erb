@@ -1,0 +1,26 @@
+<% content_for :title, "Edit Time Log" %>
+
+<div class="p-4 mt-14 bg-white dark:bg-gray-800 border-1 border-gray-200 rounded-lg dark:border-gray-700">
+  <!-- Header Section -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Edit Time Log</h1>
+    <div class="text-sm text-gray-600 dark:text-gray-400">
+      <p class="mb-2">Editing time log for <span class="font-semibold text-blue-600 dark:text-blue-400"><%= @time_log.category.name %></span></p>
+      <div class="text-sm">
+        <span class="font-medium">Original:</span>
+        <%= @time_log.start_time.strftime("%b %d, %Y at %I:%M %p") %>
+        <% if @time_log.end_time %>
+          - <%= @time_log.end_time.strftime("%I:%M %p") %>
+          (<%= @time_log.duration_formatted %>)
+        <% else %>
+          - <span class="text-blue-600 dark:text-blue-400">In progress</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="bg-white dark:bg-gray-800">
+    <%= render 'form' %>
+  </div>
+</div>

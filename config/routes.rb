@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   # Categories resource - excluding show action
   resources :categories, except: [ :show ]
 
+  # Time logs resource - excluding show action
+  resources :time_logs, except: [ :show ]
+
   # Pages routes
   get "pages/home"
   get "pages/about"
