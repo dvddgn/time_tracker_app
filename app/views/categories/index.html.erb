@@ -52,10 +52,15 @@
                   <span class="text-gray-400 italic">No description</span>
                 <% end %>
               </td>
-              <td class="px-6 py-4 text-right">
-                <%= link_to "Edit", edit_category_path(category), class: "font-medium text-blue-700 dark:text-blue-500 hover:underline mr-3" %>
-                <!-- Delete button will be added in a future video -->
-              </td>
+							<td class="px-6 py-4 text-right">
+							<%= link_to "Edit", edit_category_path(category), class: "font-medium text-blue-700 dark:text-blue-500 hover:underline mr-3" %>
+							
+							<!-- Delete Confirmation Modal -->
+							<%= render 'shared/delete_confirmation_modal', 
+									item: category, 
+									path: category_path(category), 
+									type: 'category' %>
+							</td>
             </tr>
           <% end %>
         </tbody>
