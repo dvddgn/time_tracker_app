@@ -1,0 +1,55 @@
+<%= form_with model: @category, local: true, class: "space-y-6" do |form| %>
+    <!-- Error Messages -->
+    <% if @category.errors.any? %>
+      <div class="flex p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 mr-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Danger</span>
+        <div>
+          <span class="font-medium">Please fix the following errors:</span>
+          <ul class="mt-1.5 list-disc list-inside">
+            <% @category.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  
+    <!-- Name Field -->
+    <div>
+      <%= form.label :name, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+      <%= form.text_field :name, 
+          class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 #{'border-red-500 dark:border-red-500' if @category.errors[:name].any?}",
+          placeholder: "Enter category name",
+          required: true %>
+      <% if @category.errors[:name].any? %>
+        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          <%= @category.errors[:name].first %>
+        </p>
+      <% end %>
+    </div>
+  
+    <!-- Description Field -->
+    <div>
+      <%= form.label :description, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+      <%= form.text_area :description,
+          rows: 4,
+          class: "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+          placeholder: "Add a description for this category (optional)" %>
+      <% if @category.errors[:description].any? %>
+        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          <%= @category.errors[:description].first %>
+        </p>
+      <% end %>
+    </div>
+  
+    <!-- Form Actions -->
+    <div class="flex items-center space-x-4">
+      <%= link_to "Cancel", categories_path, 
+          class: "px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-600" %>
+      <%= form.submit (@category.persisted? ? "Update Category" : "Create Category"), 
+          class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
+    </div>
+  <% end %>
