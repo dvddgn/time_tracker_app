@@ -1,4 +1,6 @@
 class TimeLogsController < ApplicationController
+  before_action :set_time_log, only: [ :edit, :update, :destroy ]
+
   def index
     @time_logs = Current.user.time_logs.includes(:category).ordered_by_start_time
   end
@@ -17,6 +19,24 @@ class TimeLogsController < ApplicationController
       @categories = Current.user.categories.ordered_by_name
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def edit
+    @categories = Current.user.categories.ordered_by_name
+  end
+
+  def update
+    if @time_log.update(time_log_params)
+      redirect_to time_logs_path, notice: "Time log was successfully updated."
+    else
+      @categories = Current.user.categories.ordered_by_name
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @time_log.destroy
+    redirect_to time_logs_path, notice: "Time log was successfully deleted."
   end
 
   private

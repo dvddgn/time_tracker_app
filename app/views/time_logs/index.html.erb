@@ -82,7 +82,12 @@
               <!-- Actions Column -->
               <td class="px-6 py-4 text-right">
                 <%= link_to "Edit", edit_time_log_path(time_log), class: "font-medium text-blue-700 dark:text-blue-500 hover:underline mr-3" %>
-                <!-- Delete button will be added in future video -->
+                
+                <!-- Delete Confirmation Modal -->
+                <%= render 'shared/delete_confirmation_modal', 
+                    item: time_log, 
+                    path: time_log_path(time_log), 
+                    type: 'time log' %>
               </td>
             </tr>
           <% end %>
