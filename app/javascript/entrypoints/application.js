@@ -87,8 +87,8 @@ function initializeDataTables() {
       perPageSelect: [5, 10, 25, 50, 100], // Better page size options
       nextPrev: true,
       firstLast: false, // Enable first/last buttons for better navigation
-      prevText: "‹",
-      nextText: "›",
+      prevText: "",
+      nextText: "",
       
       // Appearance improvements
       fixedHeight: false,

@@ -17,3 +17,208 @@
  @source "../../../app/views/**/*.rb";
  @source "../../../app/helpers/**/*.rb";
  @source "../../../node_modules/flowbite";
+
+ /* Default styling from style.css:27 */
+.datatable-input {
+  padding: 6px 12px;
+}
+
+/* Custom overrides - Flowbite styled */
+.datatable-input {
+  @apply px-4 py-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  width: 300px;
+}
+
+/* Main header styling */
+.datatable-table > thead > tr > th {
+  @apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b border-gray-200 dark:border-gray-600;
+  vertical-align: bottom;
+  text-align: left;
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+/* Header buttons (for sortable columns) */
+.datatable-table th button {
+  @apply text-gray-700 dark:text-gray-400 bg-transparent border-0 cursor-pointer font-semibold hover:text-blue-600 dark:hover:text-blue-500;
+  text-align: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+  padding: 0;
+}
+
+/* Sort container */
+.datatable-sorter {
+  @apply w-full h-full;
+}
+
+/* Sort button content with SVG */
+.datatable-sorter span {
+  @apply flex items-center justify-start;
+}
+
+/* SVG arrow styling */
+.datatable-sorter svg {
+  @apply text-gray-400 dark:text-gray-500 ml-1 transition-colors;
+}
+
+/* Active sort states - SVG color changes */
+.datatable-ascending .datatable-sorter svg,
+.datatable-descending .datatable-sorter svg {
+  @apply text-blue-600 dark:text-blue-500;
+}
+
+/* Hover state for SVG */
+.datatable-table th button:hover .datatable-sorter svg {
+  @apply text-gray-600 dark:text-gray-300;
+}
+
+/* Right-aligned Actions column */
+.datatable-table th.text-right .datatable-sorter {
+  @apply justify-end text-right;
+}
+
+/* Actions column specific styling */
+.datatable-table th.text-right button {
+  @apply text-right justify-end;
+  width: 100%;
+}
+
+/* Fix for nested button issues - flatten any nested buttons */
+.datatable-table th button button {
+  all: unset;
+  display: contents;
+}
+
+/* Pagination container */
+.datatable-pagination ul {
+  @apply flex justify-center items-center m-0 p-0;
+}
+
+.datatable-pagination-list-item {
+  list-style: none;
+}
+
+/* Pagination buttons - minimal style */
+.datatable-pagination-list-item-link {
+  @apply flex items-center justify-center w-8 h-8 text-sm text-gray-500 bg-white border border-gray-200 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.15s ease;
+  margin-left: -1px;
+}
+
+/* First pagination button - rounded left */
+.datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+  margin-left: 0;
+}
+
+/* Last pagination button - rounded right */
+.datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+/* Active page styling - inherit from li classes */
+.datatable-pagination-list-item.bg-blue-100 .datatable-pagination-list-item-link {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+}
+
+/* Disabled state */
+.datatable-pagination-list-item.opacity-50 .datatable-pagination-list-item-link {
+  @apply cursor-not-allowed;
+}
+
+/* Hidden pagination items - but always show first and last (prev/next arrows) */
+.datatable-pagination-list-item.datatable-hidden {
+  @apply hidden;
+}
+
+.datatable-pagination-list-item:first-child.datatable-hidden,
+.datatable-pagination-list-item:last-child.datatable-hidden {
+  @apply block;
+}
+
+/* Main wrapper */
+.datatable-wrapper {
+  @apply overflow-hidden;
+}
+
+/* Top controls area (search, entries selector) */
+.datatable-top {
+  @apply bg-white flex justify-between items-center dark:bg-gray-800;
+}
+
+/* Bottom controls area (pagination, info) */
+.datatable-bottom {
+  @apply bg-white flex justify-between items-center dark:bg-gray-800;
+}
+
+/* Table container */
+.datatable-container {
+  overflow-x: auto;
+}
+
+/* Table styling */
+.datatable-table {
+  @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+}
+
+/* Table body rows */
+.datatable-table tbody tr {
+  @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600;
+}
+
+/* Table body cells */
+.datatable-table tbody td {
+  @apply px-4 py-3;
+}
+
+/* Info text */
+.datatable-info {
+  @apply m-0 text-sm font-normal text-gray-500 dark:text-gray-400;
+}
+
+/* Dropdown container for entries per page */
+.datatable-dropdown {
+  @apply flex items-center;
+}
+
+.datatable-dropdown label {
+  @apply flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300;
+}
+
+/* Select dropdown styling */
+.datatable-selector {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  min-width: 60px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 0.75rem;
+  padding-right: 2.5rem;
+}
+
+/* Dark mode dropdown arrow */
+.dark .datatable-selector {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Hover and focus states */
+.datatable-selector:hover {
+  @apply border-gray-400 dark:border-gray-500;
+}
+
+.datatable-selector:focus {
+  @apply outline-none ring-2 ring-blue-500/50 border-blue-500 dark:ring-blue-500/50 dark:border-blue-500;
+}
+
+/* Disabled state */
+.datatable-selector:disabled {
+  @apply bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed dark:bg-gray-600 dark:border-gray-500 dark:text-gray-400;
+}
