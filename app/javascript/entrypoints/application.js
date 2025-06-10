@@ -29,6 +29,11 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 import "../../assets/stylesheets/application.css"
 import 'flowbite';
 
+// Prevent FOUC by making HTML visible after CSS loads
+document.addEventListener('DOMContentLoaded', function() {
+  document.documentElement.classList.add('loaded');
+});
+
 // Mobile sidebar toggle functionality
 document.addEventListener('DOMContentLoaded', function() {
     const sidebarToggle = document.getElementById('toggleSidebarMobile');
