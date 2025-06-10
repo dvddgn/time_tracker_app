@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_10_052543) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_10_092012) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -29,6 +29,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_052543) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "time_logs", force: :cascade do |t|
+    t.integer "category_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_time_logs_on_category_id"
+    t.index ["user_id"], name: "index_time_logs_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
@@ -39,4 +51,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_052543) do
 
   add_foreign_key "categories", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "time_logs", "categories"
+  add_foreign_key "time_logs", "users"
 end
