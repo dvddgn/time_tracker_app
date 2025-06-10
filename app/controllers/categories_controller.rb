@@ -1,6 +1,4 @@
 class CategoriesController < ApplicationController
-	# before_action :set_category, only: [ :edit, :update, :destroy ]
-
 	def index
 		@categories = Current.user.categories.ordered_by_name
 	end
@@ -8,6 +6,16 @@ class CategoriesController < ApplicationController
 	def new
 		@category = Current.user.categories.build
 	end
+
+	def create
+    @category = Current.user.categories.build(category_params)
+
+    if @category.save
+      redirect_to categories_path, notice: "Category was successfully created."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
 
 	private
 
