@@ -21,7 +21,14 @@
     <%= vite_javascript_tag 'application' %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-gray-50 dark:bg-gray-900">
+    <% if authenticated? %>
+      <%= render 'shared/admin_layout' %>
+      <div class="p-4 sm:ml-64">
+        <%= yield %>
+      </div>
+    <% else %>
+      <%= yield %>
+    <% end %>
   </body>
 </html>

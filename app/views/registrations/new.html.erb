@@ -1,0 +1,85 @@
+<section class="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md px-6 py-8">
+    <%= link_to root_path, class: "flex items-center justify-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white" do %>
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Time Hub Icon" class="h-8 me-1">
+        <defs>
+          <radialGradient id="timehub-dark-gradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#1E40AF" />
+            <stop offset="100%" stop-color="#1E3A8A" />
+          </radialGradient>
+        </defs>
+        <rect x="2" y="2" width="36" height="36" rx="10" fill="url(#timehub-dark-gradient)" />
+        <circle cx="20" cy="20" r="10" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none" />
+        <path d="M20 20 L24 14" stroke="white" stroke-width="2" stroke-linecap="round" />
+        <path d="M20 20 L16 16" stroke="white" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      <span class="self-center text-xl font-bold sm:text-2xl whitespace-nowrap dark:text-white">
+        Time <span class="text-xl text-blue-700 font-bold sm:text-2xl whitespace-nowrap dark:text-white">Hub</span>
+      </span>
+    <% end %>
+    
+    <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+          Create an account
+        </h1>
+        
+        <!-- Flash Messages for Validation Errors -->
+        <% if flash[:alert] %>
+          <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Error</span>
+            <div><%= flash[:alert] %></div>
+          </div>
+        <% end %>
+        
+        <%= form_with model: @user, url: registrations_path, local: true, class: "space-y-4 md:space-y-6" do |form| %>
+          <!-- Email Field -->
+          <div>
+            <%= form.label :email_address, "Your email", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.email_field :email_address, 
+                placeholder: "name@company.com", 
+                required: true,
+                autofocus: true,
+                autocomplete: "username",
+                class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+          </div>
+          
+          <!-- Password Field -->
+          <div>
+            <%= form.label :password, "Password", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.password_field :password, 
+                placeholder: "••••••••", 
+                required: true,
+                autocomplete: "new-password",
+                maxlength: 72,
+                class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Must be at least 8 characters long</p>
+          </div>
+          
+          <!-- Password Confirmation Field -->
+          <div>
+            <%= form.label :password_confirmation, "Confirm password", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+            <%= form.password_field :password_confirmation, 
+                placeholder: "••••••••", 
+                required: true,
+                autocomplete: "new-password",
+                maxlength: 72,
+                class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+          </div>
+          
+          <!-- Submit Button -->
+          <%= form.submit "Create an account", 
+              class: "w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800" %>
+          
+          <!-- Login Link -->
+          <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+            Already have an account? <%= link_to "Login here", new_session_path, class: "font-medium text-blue-700 hover:underline dark:text-blue-500" %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
