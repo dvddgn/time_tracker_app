@@ -63,20 +63,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize DataTables for all tables
 function initializeDataTables() {
+
+  // Enhanced Time Logs Table configuration
   const timeLogsTable = document.getElementById('time-logs-table')
   
   if (timeLogsTable) {
     const timeLogsDataTable = new DataTable(timeLogsTable, {
       // Searching improvements
       searchable: true,
+      searchAnd: false,
       sensitivity: "base", // Better search sensitivity for accented characters
       searchQuerySeparator: " ", // Explicit separator for multi-term searches
+      ignorePunctuation: false,
       
       // Sorting improvements
       sortable: true,
       locale: "en-US", // Better locale-specific sorting
       numeric: true, // Better numeric sorting for duration column
-      ignorePunctuation: true, // Ignore punctuation when sorting text
       
       // Pagination improvements
       paging: true,
@@ -104,7 +107,7 @@ function initializeDataTables() {
         { select: 4, sortable: false, searchable: false }
       ],
       
-      // Custom classes for better Tailwind integration
+      // Custom classes 
       classes: {
         active: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
         disabled: "opacity-50 cursor-not-allowed",
@@ -119,32 +122,26 @@ function initializeDataTables() {
         noEntries: "No time logs available"
       }
     })
-    
-    // Add event listeners for better UX
-    timeLogsDataTable.on('datatable.search', function(query, matched) {
-      console.log(`Search: "${query}" - ${matched.length} results found`);
-    });
-    
-    timeLogsDataTable.on('datatable.sort', function(column, direction) {
-      console.log(`Sorted by column ${column} in ${direction} order`);
-    });
   }
 
   // Enhanced Categories Table configuration
   const categoriesTable = document.getElementById('categories-table')
+
   if (categoriesTable) {
     new DataTable(categoriesTable, {
-      // Enhanced searching
+      // Searching improvements
       searchable: true,
-      sensitivity: "base",
-      searchQuerySeparator: " ",
+      searchAnd: false,
+      sensitivity: "base", // Better search sensitivity for accented characters
+      searchQuerySeparator: " ", // Explicit separator for multi-term searches
+      ignorePunctuation: false,
       
-      // Enhanced sorting
+      // Sorting improvements
       sortable: true,
       locale: "en-US",
-      ignorePunctuation: true,
+      numeric: true, // Better numeric sorting for duration column
       
-      // Enhanced pagination
+      // Pagination improvements
       paging: true,
       perPage: 10,
       perPageSelect: [5, 10, 15, 25, 50],
@@ -157,19 +154,21 @@ function initializeDataTables() {
       fixedHeight: false,
       
       columns: [
-        // Name column (index 0)
+        // Name column (index 0) - searchable and sortable
         { select: 0, sortable: true, searchable: true },
-        // Description column (index 1)
+        // Description column (index 1) - searchable and sortable
         { select: 1, sortable: true, searchable: true },
-        // Actions column (index 2)
+        // Actions column (index 2) - not sortable or searchable
         { select: 2, sortable: false, searchable: false }
       ],
       
+      // Custom classes 
       classes: {
         active: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
         disabled: "opacity-50 cursor-not-allowed"
       },
       
+      // Enhanced labels
       labels: {
         placeholder: "Search categories ...",
         perPage: "entries per page",
