@@ -47,7 +47,21 @@
               </td>
 
               <!-- Date/Time Column -->
+              <%
+                # Build search terms array
+                search_terms = []
+                
+                # Date formats
+                search_terms << time_log.start_time.strftime("%m/%d/%Y")     # "06/10/2025"
+                search_terms << time_log.start_time.strftime("%m/%d")        # "06/10"
+                search_terms << time_log.start_time.strftime("%m-%d-%Y")     # "06-10-2025"
+                search_terms << time_log.start_time.strftime("%m-%d")        # "06-10"
+                search_terms << time_log.start_time.strftime("%-m/%-d")      # "6/10"
+                search_terms << time_log.start_time.strftime("%-m-%-d")      # "6-10"
+              %>
+
               <td class="px-6 py-4" data-order="<%= time_log.start_time.to_i %>">
+                <!-- Visible content -->
                 <div class="text-gray-900 dark:text-white font-medium">
                   <%= time_log.start_time.strftime("%b %d, %Y") %>
                 </div>
@@ -59,6 +73,8 @@
                     - <span class="text-blue-600 dark:text-blue-400">In progress</span>
                   <% end %>
                 </div>
+                <!-- Hidden content (search terms) -->
+                <span class="sr-only"><%= search_terms.join(" ") %></span>
               </td>
               
               <!-- Duration Column -->
