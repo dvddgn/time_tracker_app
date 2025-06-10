@@ -8,6 +8,17 @@ class TimeLogsController < ApplicationController
     @categories = Current.user.categories.ordered_by_name
   end
 
+  def create
+    @time_log = Current.user.time_logs.build(time_log_params)
+
+    if @time_log.save
+      redirect_to time_logs_path, notice: "Time log was successfully created."
+    else
+      @categories = Current.user.categories.ordered_by_name
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_time_log
