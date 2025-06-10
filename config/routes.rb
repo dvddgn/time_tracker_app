@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resource :registrations, only: [:new, :create]
 
+  # Categories resource - excluding show action
+  resources :categories, except: [ :show ]
+
   # Pages routes
   get "pages/home"
   get "pages/about"
