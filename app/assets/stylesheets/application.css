@@ -137,72 +137,111 @@
   }
 }
 
-/* UPDATED PAGINATION STYLES - Base pagination button styling with consistent sizing */
+/* UPDATED PAGINATION STYLES - Flowbite style connected buttons */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list {
+  display: inline-flex !important;
+  margin: 0 !important;
+}
+
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
   background-color: white !important;
-  border: 1px solid #d1d5db !important;
-  color: #374151 !important;
-  padding: 0.5rem 0.75rem !important;
-  border-radius: 0.375rem !important;
-  margin-left: 0.25rem !important;
-  /* Add consistent sizing */
-  min-width: 2.5rem !important; /* 40px minimum width */
-  height: 2.5rem !important; /* 40px height */
+  border: 1px solid #d1d5db !important; /* border-gray-300 */
+  color: #6b7280 !important; /* text-gray-500 */
+  padding: 0 1rem !important; /* px-4 */
+  height: 2.5rem !important; /* h-10 */
+  min-width: auto !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
+  line-height: 1.25 !important; /* leading-tight */
+  margin-left: 0 !important; /* Remove spacing */
+  border-radius: 0 !important; /* Remove individual border radius */
+  border-right: 0 !important; /* Remove right border for connected look */
 }
 
-/* Remove background from list items - this fixes the blue background outside border */
+/* First button - rounded left corners */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
+  border-radius: 0.5rem 0 0 0.5rem !important; /* rounded-s-lg */
+  border-right: 0 !important;
+}
+
+/* Last button - rounded right corners and restore right border */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
+  border-radius: 0 0.5rem 0.5rem 0 !important; /* rounded-e-lg */
+  border-right: 1px solid #d1d5db !important;
+}
+
+/* Single button (when only one page) - fully rounded */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child:last-child .datatable-pagination-list-item-link {
+  border-radius: 0.5rem !important;
+  border-right: 1px solid #d1d5db !important;
+}
+
+/* Remove background from list items */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item {
   background: none !important;
   background-color: transparent !important;
+  margin: 0 !important;
 }
 
-/* Active pagination button - only style the button, not the list item */
+/* Active pagination button - Flowbite style */
 .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
-  background-color: #3b82f6 !important; /* Blue background */
-  color: white !important; /* White text */
-  border-color: #3b82f6 !important; /* Blue border */
+  background-color: #eff6ff !important; /* bg-blue-50 */
+  color: #2563eb !important; /* text-blue-600 */
+  border-color: #d1d5db !important; /* border-gray-300 */
+}
+
+/* Hover effects for non-active buttons */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
+  background-color: #f3f4f6 !important; /* hover:bg-gray-100 */
+  color: #374151 !important; /* hover:text-gray-700 */
+}
+
+/* Hover effects for active button */
+.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link:hover {
+  background-color: #dbeafe !important; /* hover:bg-blue-100 */
+  color: #1d4ed8 !important; /* hover:text-blue-700 */
 }
 
 /* Dark mode pagination styles */
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
-  background-color: #374151 !important;
-  border-color: #6b7280 !important;
-  color: #f9fafb !important;
+  background-color: #1f2937 !important; /* dark:bg-gray-800 */
+  border-color: #374151 !important; /* dark:border-gray-700 */
+  color: #9ca3af !important; /* dark:text-gray-400 */
 }
 
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link,
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900 .datatable-pagination-list-item-link {
-  background-color: #1d4ed8 !important; /* Darker blue for dark mode */
-  color: #f0f9ff !important;
-  border-color: #1d4ed8 !important;
+  background-color: #374151 !important; /* dark:bg-gray-700 */
+  color: white !important; /* dark:text-white */
+  border-color: #374151 !important; /* dark:border-gray-700 */
+}
+
+/* Dark mode hover effects */
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100):not(.dark\:bg-blue-900) .datatable-pagination-list-item-link:hover {
+  background-color: #374151 !important; /* dark:hover:bg-gray-700 */
+  color: white !important; /* dark:hover:text-white */
 }
 
 /* Media query for dark mode pagination */
 @media (prefers-color-scheme: dark) {
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
-    background-color: #374151 !important;
-    border-color: #6b7280 !important;
-    color: #f9fafb !important;
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #9ca3af !important;
   }
   
   .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
-    background-color: #1d4ed8 !important;
-    color: #f0f9ff !important;
-    border-color: #1d4ed8 !important;
+    background-color: #374151 !important;
+    color: white !important;
+    border-color: #374151 !important;
   }
-}
-
-/* Pagination hover effects */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link:hover:not(.disabled) {
-  background-color: #f3f4f6 !important;
-  border-color: #9ca3af !important;
-}
-
-.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link:hover {
-  background-color: #2563eb !important; /* Darker blue on hover */
+  
+  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
+    background-color: #374151 !important;
+    color: white !important;
+  }
 }
 
 /* Disabled pagination state */
