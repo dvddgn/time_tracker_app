@@ -82,7 +82,7 @@
 
 /* Base pagination button styles */
 .datatable-pagination button {
-  @apply bg-white text-gray-500 border border-gray-300;
+  @apply bg-white text-gray-500 border border-gray-300 cursor-pointer;
   @apply dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600;
 }
 
@@ -94,7 +94,7 @@
 
 /* Disabled state */
 .datatable-disabled button {
-  @apply bg-gray-100 text-gray-300 border-gray-200;
+  @apply bg-gray-100 text-gray-300 border-gray-200 cursor-not-allowed;
   @apply dark:bg-gray-700 dark:text-gray-600 dark:border-gray-600;
 }
 
