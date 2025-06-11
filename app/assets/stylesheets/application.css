@@ -44,6 +44,28 @@
   @apply text-blue-800 dark:text-blue-200;
 }
 
+/* ========== SORTER CARETS TO SHOW SORT DIRECTION ========== */
+
+/* Base sorter styling */
+.datatable-sorter {
+  @apply relative pr-6;
+}
+
+.datatable-sorter::after {
+  @apply absolute right-1 top-1/2 transform -translate-y-1/2 text-xs opacity-50;
+  content: "⇅";
+}
+
+.datatable-ascending .datatable-sorter::after {
+  @apply opacity-100 text-blue-600 dark:text-blue-400;
+  content: "▲";
+}
+
+.datatable-descending .datatable-sorter::after {
+  @apply opacity-100 text-blue-600 dark:text-blue-400;
+  content: "▼";
+}
+
 /* ========== FORM INPUTS ========== */
 
 .datatable-input,
