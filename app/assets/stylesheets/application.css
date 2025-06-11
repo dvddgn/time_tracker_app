@@ -18,83 +18,74 @@
  @source "../../../app/helpers/**/*.rb";
  @source "../../../node_modules/flowbite";
 
-/* TABLE HEADER AND SORTERS */
+/* ========== TABLE HEADER ========== */
 
-/* Table header */
 .datatable-table thead {
   @apply bg-gray-50 dark:bg-gray-700;
 }
 
-/* Table header sorter buttons - base styles */
 .datatable-sorter {
-  @apply bg-white text-gray-700;
+  @apply bg-white text-gray-700 text-xs font-medium uppercase tracking-wide cursor-pointer;
   @apply dark:bg-gray-700 dark:text-gray-400;
-  @apply text-xs font-medium uppercase tracking-wide;
-  @apply cursor-pointer;
 }
 
-/* Hover states for sorter buttons */
 .datatable-sorter:hover {
-  @apply bg-gray-50 text-gray-900;
-  @apply dark:bg-gray-700 dark:text-white;
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white;
 }
 
-/* Active/sorted column styling */
+/* Sorted columns */
 .datatable-ascending .datatable-sorter,
 .datatable-descending .datatable-sorter {
-  @apply text-blue-700;
-  @apply dark:text-blue-300;
+  @apply text-blue-700 dark:text-blue-300;
 }
 
-/* Active/sorted column hover */
 .datatable-ascending .datatable-sorter:hover,
 .datatable-descending .datatable-sorter:hover {
-  @apply text-blue-800;
-  @apply dark:text-blue-200;
+  @apply text-blue-800 dark:text-blue-200;
 }
 
-/* SEARCH */
+/* ========== FORM INPUTS ========== */
+
+.datatable-input,
+.datatable-selector {
+  @apply bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm;
+  @apply dark:bg-gray-800 dark:text-white dark:border-gray-600;
+}
 
 .datatable-input {
-  @apply bg-white text-gray-900 border border-gray-300 rounded-lg;
-  @apply dark:bg-gray-800 dark:text-white dark:border-gray-600;
-  @apply px-4 py-2 text-sm;
+  @apply px-4; 
 }
 
-/* PAGINATION */
+/* ========== PAGINATION ========== */
 
-/* Pagination selector */
-.datatable-selector {
-  @apply bg-white text-gray-900 border border-gray-300 rounded-lg;
-  @apply dark:bg-gray-800 dark:text-white dark:border-gray-600;
-  @apply px-3 py-2 text-sm;
-}
-
-/* All pagination buttons - base styles */
-.datatable-pagination-list-item-link {
+/* Base pagination button styles */
+.datatable-pagination button {
   @apply bg-white text-gray-500 border border-gray-300;
   @apply dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600;
 }
 
-/* Active button */
-.datatable-pagination-list-item.datatable-active .datatable-pagination-list-item-link {
+/* Active state */
+.datatable-active button {
   @apply bg-blue-50 text-blue-600 border-blue-300;
   @apply dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700;
 }
 
-/* Disabled button */
-.datatable-pagination-list-item.datatable-disabled .datatable-pagination-list-item-link {
+/* Disabled state */
+.datatable-disabled button {
   @apply bg-gray-100 text-gray-300 border-gray-200;
   @apply dark:bg-gray-700 dark:text-gray-600 dark:border-gray-600;
 }
 
 /* Hover states */
-.datatable-pagination-list-item-link:hover {
-  @apply bg-gray-50 text-gray-700;
-  @apply dark:bg-gray-700 dark:text-white;
+.datatable-pagination button:hover {
+  @apply bg-gray-50 text-gray-700 dark:bg-gray-700 dark:text-white;
 }
 
-.datatable-pagination-list-item.datatable-active .datatable-pagination-list-item-link:hover {
-  @apply bg-blue-100 text-blue-700;
-  @apply dark:bg-blue-800 dark:text-blue-200;
+.datatable-active button:hover {
+  @apply bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-200;
+}
+
+/* Disabled buttons don't change on hover */
+.datatable-disabled button:hover {
+  @apply bg-gray-100 text-gray-300 dark:bg-gray-700 dark:text-gray-600;
 }
