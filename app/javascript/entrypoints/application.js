@@ -113,11 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     info: "Showing {start} to {end} of {rows} categories"
                 },
                 columns: [
-                    // Name column (index 0)
+                    // Name column (index 0) - searchable and sortable
                     { select: 0, sortable: true, searchable: true },
-                    // Description column (index 1)
+                    // Description column (index 1) - searchable and sortable
                     { select: 1, sortable: true, searchable: true },
-                    // Actions column (index 2)
+                    // Actions column (index 2) - not sortable or searchable
                     { select: 2, sortable: false, searchable: false }
                 ]
             });
