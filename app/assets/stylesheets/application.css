@@ -18,7 +18,11 @@
  @source "../../../app/helpers/**/*.rb";
  @source "../../../node_modules/flowbite";
 
-/* Target with full specificity using the wrapper structure */
+/* ==========================================================================
+   DATATABLE STYLING - Simplified and Consolidated
+   ========================================================================== */
+
+/* Search Input */
 .datatable-wrapper .datatable-top .datatable-search .datatable-input {
   background-color: white !important;
   border: 1px solid #d1d5db !important;
@@ -27,22 +31,7 @@
   border-radius: 0.375rem !important;
 }
 
-.dark .datatable-wrapper .datatable-top .datatable-search .datatable-input {
-  background-color: #374151 !important;
-  border-color: #6b7280 !important;
-  color: #f9fafb !important;
-}
-
-/* Media query version for immediate browser dark mode response */
-@media (prefers-color-scheme: dark) {
-  .datatable-wrapper .datatable-top .datatable-search .datatable-input {
-    background-color: #374151 !important;
-    border-color: #6b7280 !important;
-    color: #f9fafb !important;
-  }
-}
-
-/* Select dropdown */
+/* Dropdown Selector */
 .datatable-wrapper .datatable-top .datatable-dropdown .datatable-selector {
   background-color: white !important;
   border: 1px solid #d1d5db !important;
@@ -51,259 +40,205 @@
   border-radius: 0.375rem !important;
 }
 
+/* Dropdown Label */
+.datatable-wrapper .datatable-top .datatable-dropdown label {
+  color: #374151 !important;
+}
+
+/* Table Headers */
+.datatable-table thead,
+.datatable-table thead th {
+  background-color: #f9fafb !important;
+  color: #374151 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+}
+
+/* Sort Buttons */
+.datatable-table thead .datatable-sorter {
+  background: transparent !important;
+  color: inherit !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  font-weight: inherit !important;
+}
+
+/* Info Text */
+.datatable-wrapper .datatable-bottom .datatable-info {
+  color: #6b7280 !important;
+}
+
+/* ==========================================================================
+   PAGINATION STYLES - Flowbite Connected Buttons
+   ========================================================================== */
+
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list {
+  display: inline-flex !important;
+  margin: 0 !important;
+}
+
+/* Base Button Styles */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
+  background-color: white !important;
+  border-top: 1px solid #d1d5db !important;
+  border-bottom: 1px solid #d1d5db !important;
+  border-left: 1px solid #d1d5db !important;
+  border-right: 0 !important;
+  color: #6b7280 !important;
+  padding: 0 1rem !important;
+  height: 2.5rem !important;
+  min-width: 2.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.25 !important;
+  border-radius: 0 !important;
+  margin-left: -1px !important;
+}
+
+/* Remove background from list items */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item {
+  background: none !important;
+  margin: 0 !important;
+}
+
+/* First Button */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
+  border-radius: 0.5rem 0 0 0.5rem !important;
+  margin-left: 0 !important;
+}
+
+/* Last Button */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+  border-right: 1px solid #d1d5db !important;
+}
+
+/* Single Button */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child:last-child .datatable-pagination-list-item-link {
+  border-radius: 0.5rem !important;
+  border-right: 1px solid #d1d5db !important;
+}
+
+/* Active Button */
+.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+}
+
+/* Hover Effects */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
+.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link:hover {
+  background-color: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+/* Disabled Buttons */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden .datatable-pagination-list-item-link,
+.datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50 .datatable-pagination-list-item-link {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================================
+   DARK MODE STYLES
+   ========================================================================== */
+
+.dark .datatable-wrapper .datatable-top .datatable-search .datatable-input,
 .dark .datatable-wrapper .datatable-top .datatable-dropdown .datatable-selector {
   background-color: #374151 !important;
   border-color: #6b7280 !important;
   color: #f9fafb !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  .datatable-wrapper .datatable-top .datatable-dropdown .datatable-selector {
-    background-color: #374151 !important;
-    border-color: #6b7280 !important;
-    color: #f9fafb !important;
-  }
-}
-
-/* Dropdown label */
-.datatable-wrapper .datatable-top .datatable-dropdown label {
-  color: #374151 !important;
-}
-
 .dark .datatable-wrapper .datatable-top .datatable-dropdown label {
   color: #f9fafb !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  .datatable-wrapper .datatable-top .datatable-dropdown label {
-    color: #f9fafb !important;
-  }
-}
-
-/* Table Header Styling */
-.datatable-table thead {
-  background-color: #f9fafb !important; /* bg-gray-50 */
-  color: #374151 !important; /* text-gray-700 */
-}
-
-.dark .datatable-table thead {
-  background-color: #374151 !important; /* dark:bg-gray-700 */
-  color: #9ca3af !important; /* dark:text-gray-400 */
-}
-
-@media (prefers-color-scheme: dark) {
-  .datatable-table thead {
-    background-color: #374151 !important; /* dark:bg-gray-700 */
-    color: #9ca3af !important; /* dark:text-gray-400 */
-  }
-}
-
-/* Table Header Cells */
-.datatable-table thead th {
-  background-color: #f9fafb !important; /* bg-gray-50 */
-  color: #374151 !important; /* text-gray-700 */
-  text-transform: uppercase !important;
-  font-size: 0.75rem !important; /* text-xs */
-}
-
-.dark .datatable-table thead th {
-  background-color: #374151 !important; /* dark:bg-gray-700 */
-  color: #9ca3af !important; /* dark:text-gray-400 */
-}
-
-@media (prefers-color-scheme: dark) {
-  .datatable-table thead th {
-    background-color: #374151 !important; /* dark:bg-gray-700 */
-    color: #9ca3af !important; /* dark:text-gray-400 */
-  }
-}
-
-/* Sort Buttons in Header */
-.datatable-table thead .datatable-sorter {
-  background: transparent !important;
-  color: inherit !important;
-  text-transform: uppercase !important;
-  font-size: 0.75rem !important; /* text-xs */
-  font-weight: inherit !important;
-}
-
+.dark .datatable-table thead,
+.dark .datatable-table thead th,
 .dark .datatable-table thead .datatable-sorter {
-  color: #9ca3af !important; /* dark:text-gray-400 */
-}
-
-@media (prefers-color-scheme: dark) {
-  .datatable-table thead .datatable-sorter {
-    color: #9ca3af !important; /* dark:text-gray-400 */
-  }
-}
-
-/* UPDATED PAGINATION STYLES - Flowbite style connected buttons with consistent borders */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list {
-  display: inline-flex !important;
-  margin: 0 !important;
-}
-
-/* Base styling for ALL pagination buttons - ensures consistent borders */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
-  background-color: white !important;
-  border-top: 1px solid #d1d5db !important;
-  border-bottom: 1px solid #d1d5db !important;
-  border-left: 1px solid #d1d5db !important;
-  border-right: 0 !important; /* Remove right border for connected look */
-  color: #6b7280 !important; /* text-gray-500 */
-  padding: 0 1rem !important; /* px-4 */
-  height: 2.5rem !important; /* h-10 */
-  min-width: 2.5rem !important; /* Minimum width for arrow buttons */
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  line-height: 1.25 !important; /* leading-tight */
-  margin-left: 0 !important; /* Remove spacing */
-  border-radius: 0 !important; /* Remove individual border radius */
-  margin-left: -1px !important; /* Overlap borders to prevent double thickness */
-}
-
-/* First button - rounded left corners and no left margin */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
-  border-radius: 0.5rem 0 0 0.5rem !important; /* rounded-s-lg */
-  margin-left: 0 !important; /* First button has no margin */
-}
-
-/* Last button - rounded right corners and restore right border */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
-  border-radius: 0 0.5rem 0.5rem 0 !important; /* rounded-e-lg */
-  border-right: 1px solid #d1d5db !important; /* Restore right border */
-}
-
-/* Single button (when only one page) - fully rounded */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child:last-child .datatable-pagination-list-item-link {
-  border-radius: 0.5rem !important;
-  border-right: 1px solid #d1d5db !important; /* Full border for single button */
-}
-
-/* Remove background from list items */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item {
-  background: none !important;
-  background-color: transparent !important;
-  margin: 0 !important;
-}
-
-/* Active pagination button - Flowbite style */
-.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
-  background-color: #eff6ff !important; /* bg-blue-50 */
-  color: #2563eb !important; /* text-blue-600 */
-}
-
-/* Active button - if it's the last button, ensure right border */
-.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100:last-child .datatable-pagination-list-item-link {
-  border-right: 1px solid #d1d5db !important; /* Full border for last active button */
-}
-
-/* Hover effects for non-active buttons */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
-  background-color: #f3f4f6 !important; /* hover:bg-gray-100 */
-  color: #374151 !important; /* hover:text-gray-700 */
-}
-
-/* Hover effects for active button */
-.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link:hover {
-  background-color: #dbeafe !important; /* hover:bg-blue-100 */
-  color: #1d4ed8 !important; /* hover:text-blue-700 */
-}
-
-/* Disabled pagination state - SIMPLIFIED */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden .datatable-pagination-list-item-link,
-.datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50 .datatable-pagination-list-item-link {
-  opacity: 0.5 !important;
-  cursor: not-allowed !important;
-  pointer-events: none !important;
-  /* Border inheritance from base styles - no need to redeclare */
-}
-
-/* Disabled last button - ensure right border */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden:last-child .datatable-pagination-list-item-link,
-.datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50:last-child .datatable-pagination-list-item-link {
-  border-right: 1px solid #d1d5db !important; /* Restore right border for disabled last button */
-}
-
-/* Dark mode pagination styles */
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
-  background-color: #1f2937 !important; /* dark:bg-gray-800 */
-  border-color: #374151 !important; /* Consistent dark border */
-  color: #9ca3af !important; /* dark:text-gray-400 */
-}
-
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
-  border-right: 1px solid #374151 !important; /* Full border for last button in dark mode */
-}
-
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link,
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900 .datatable-pagination-list-item-link {
-  background-color: #374151 !important; /* dark:bg-gray-700 */
-  color: white !important; /* dark:text-white */
-}
-
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100:last-child .datatable-pagination-list-item-link,
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900:last-child .datatable-pagination-list-item-link {
-  border-right: 1px solid #374151 !important; /* Full border for last active button in dark mode */
-}
-
-/* Dark mode disabled last button */
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden:last-child .datatable-pagination-list-item-link,
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50:last-child .datatable-pagination-list-item-link {
-  border-right: 1px solid #374151 !important; /* Full border for last disabled button in dark mode */
-}
-
-/* Dark mode hover effects */
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100):not(.dark\:bg-blue-900) .datatable-pagination-list-item-link:hover {
-  background-color: #374151 !important; /* dark:hover:bg-gray-700 */
-  color: white !important; /* dark:hover:text-white */
-}
-
-/* Media query for dark mode pagination */
-@media (prefers-color-scheme: dark) {
-  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
-    background-color: #1f2937 !important;
-    border-color: #374151 !important;
-    color: #9ca3af !important;
-  }
-  
-  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
-    border-right: 1px solid #374151 !important;
-  }
-  
-  .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
-    background-color: #374151 !important;
-    color: white !important;
-  }
-  
-  .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100:last-child .datatable-pagination-list-item-link {
-    border-right: 1px solid #374151 !important;
-  }
-  
-  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
-    background-color: #374151 !important;
-    color: white !important;
-  }
-  
-  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden:last-child .datatable-pagination-list-item-link,
-  .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50:last-child .datatable-pagination-list-item-link {
-    border-right: 1px solid #374151 !important;
-  }
-}
-
-/* Info text */
-.datatable-wrapper .datatable-bottom .datatable-info {
-  color: #6b7280 !important;
+  background-color: #374151 !important;
+  color: #9ca3af !important;
 }
 
 .dark .datatable-wrapper .datatable-bottom .datatable-info {
   color: #9ca3af !important;
 }
 
+/* Dark Mode Pagination */
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+  color: #9ca3af !important;
+}
+
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link,
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child:last-child .datatable-pagination-list-item-link {
+  border-right: 1px solid #374151 !important;
+}
+
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link,
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900 .datatable-pagination-list-item-link {
+  background-color: #374151 !important;
+  color: white !important;
+}
+
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100):not(.dark\:bg-blue-900) .datatable-pagination-list-item-link:hover {
+  background-color: #374151 !important;
+  color: white !important;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES - Auto Dark Mode
+   ========================================================================== */
+
 @media (prefers-color-scheme: dark) {
+  .datatable-wrapper .datatable-top .datatable-search .datatable-input,
+  .datatable-wrapper .datatable-top .datatable-dropdown .datatable-selector {
+    background-color: #374151 !important;
+    border-color: #6b7280 !important;
+    color: #f9fafb !important;
+  }
+
+  .datatable-wrapper .datatable-top .datatable-dropdown label {
+    color: #f9fafb !important;
+  }
+
+  .datatable-table thead,
+  .datatable-table thead th,
+  .datatable-table thead .datatable-sorter {
+    background-color: #374151 !important;
+    color: #9ca3af !important;
+  }
+
   .datatable-wrapper .datatable-bottom .datatable-info {
     color: #9ca3af !important;
+  }
+
+  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #9ca3af !important;
+  }
+
+  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link,
+  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child:last-child .datatable-pagination-list-item-link {
+    border-right: 1px solid #374151 !important;
+  }
+
+  .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
+    background-color: #374151 !important;
+    color: white !important;
+  }
+
+  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
+    background-color: #374151 !important;
+    color: white !important;
   }
 }
