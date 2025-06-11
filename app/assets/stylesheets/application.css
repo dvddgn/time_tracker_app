@@ -146,7 +146,10 @@
 /* Base styling for ALL pagination buttons - ensures consistent borders */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
   background-color: white !important;
-  border: 1px solid #d1d5db !important; /* Consistent border for all buttons */
+  border-top: 1px solid #d1d5db !important;
+  border-bottom: 1px solid #d1d5db !important;
+  border-left: 1px solid #d1d5db !important;
+  border-right: 0 !important; /* Remove right border for connected look */
   color: #6b7280 !important; /* text-gray-500 */
   padding: 0 1rem !important; /* px-4 */
   height: 2.5rem !important; /* h-10 */
@@ -158,27 +161,25 @@
   line-height: 1.25 !important; /* leading-tight */
   margin-left: 0 !important; /* Remove spacing */
   border-radius: 0 !important; /* Remove individual border radius */
-  border-right: 0 !important; /* Remove right border for connected look */
+  margin-left: -1px !important; /* Overlap borders to prevent double thickness */
 }
 
-/* First button - rounded left corners */
+/* First button - rounded left corners and no left margin */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
   border-radius: 0.5rem 0 0 0.5rem !important; /* rounded-s-lg */
-  border-right: 0 !important;
-  border: 1px solid #d1d5db !important; /* Ensure border is set */
-  border-right: 0 !important; /* Then remove right border */
+  margin-left: 0 !important; /* First button has no margin */
 }
 
 /* Last button - rounded right corners and restore right border */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
   border-radius: 0 0.5rem 0.5rem 0 !important; /* rounded-e-lg */
-  border: 1px solid #d1d5db !important; /* Full border for last button */
+  border-right: 1px solid #d1d5db !important; /* Restore right border */
 }
 
 /* Single button (when only one page) - fully rounded */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child:last-child .datatable-pagination-list-item-link {
   border-radius: 0.5rem !important;
-  border: 1px solid #d1d5db !important; /* Full border for single button */
+  border-right: 1px solid #d1d5db !important; /* Full border for single button */
 }
 
 /* Remove background from list items */
@@ -192,13 +193,11 @@
 .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
   background-color: #eff6ff !important; /* bg-blue-50 */
   color: #2563eb !important; /* text-blue-600 */
-  border: 1px solid #d1d5db !important; /* Ensure consistent border */
-  border-right: 0 !important; /* Remove right border unless it's the last */
 }
 
-/* Active button - if it's the last button, restore right border */
+/* Active button - if it's the last button, ensure right border */
 .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100:last-child .datatable-pagination-list-item-link {
-  border: 1px solid #d1d5db !important; /* Full border for last active button */
+  border-right: 1px solid #d1d5db !important; /* Full border for last active button */
 }
 
 /* Hover effects for non-active buttons */
@@ -213,66 +212,47 @@
   color: #1d4ed8 !important; /* hover:text-blue-700 */
 }
 
-/* Disabled pagination state - Enhanced with proper borders */
+/* Disabled pagination state - SIMPLIFIED */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden .datatable-pagination-list-item-link,
 .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50 .datatable-pagination-list-item-link {
   opacity: 0.5 !important;
   cursor: not-allowed !important;
   pointer-events: none !important;
-  border: 1px solid #d1d5db !important; /* Consistent border */
-  border-right: 0 !important; /* Remove right border for connected look */
+  /* Border inheritance from base styles - no need to redeclare */
 }
 
-/* Disabled first button - rounded left corners */
-.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden:first-child .datatable-pagination-list-item-link,
-.datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50:first-child .datatable-pagination-list-item-link {
-  border-radius: 0.5rem 0 0 0.5rem !important;
-  border: 1px solid #d1d5db !important;
-  border-right: 0 !important;
-}
-
-/* Disabled last button - rounded right corners and restore right border */
+/* Disabled last button - ensure right border */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden:last-child .datatable-pagination-list-item-link,
 .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50:last-child .datatable-pagination-list-item-link {
-  border-radius: 0 0.5rem 0.5rem 0 !important;
-  border: 1px solid #d1d5db !important; /* Full border for last disabled button */
+  border-right: 1px solid #d1d5db !important; /* Restore right border for disabled last button */
 }
 
 /* Dark mode pagination styles */
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
   background-color: #1f2937 !important; /* dark:bg-gray-800 */
-  border: 1px solid #374151 !important; /* Consistent dark border */
-  border-right: 0 !important;
+  border-color: #374151 !important; /* Consistent dark border */
   color: #9ca3af !important; /* dark:text-gray-400 */
 }
 
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
-  border: 1px solid #374151 !important; /* Full border for last button in dark mode */
+  border-right: 1px solid #374151 !important; /* Full border for last button in dark mode */
 }
 
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link,
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900 .datatable-pagination-list-item-link {
   background-color: #374151 !important; /* dark:bg-gray-700 */
   color: white !important; /* dark:text-white */
-  border: 1px solid #374151 !important; /* Consistent dark border */
-  border-right: 0 !important;
 }
 
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100:last-child .datatable-pagination-list-item-link,
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900:last-child .datatable-pagination-list-item-link {
-  border: 1px solid #374151 !important; /* Full border for last active button in dark mode */
+  border-right: 1px solid #374151 !important; /* Full border for last active button in dark mode */
 }
 
-/* Dark mode disabled borders */
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden .datatable-pagination-list-item-link,
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50 .datatable-pagination-list-item-link {
-  border: 1px solid #374151 !important;
-  border-right: 0 !important;
-}
-
+/* Dark mode disabled last button */
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden:last-child .datatable-pagination-list-item-link,
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50:last-child .datatable-pagination-list-item-link {
-  border: 1px solid #374151 !important; /* Full border for last disabled button in dark mode */
+  border-right: 1px solid #374151 !important; /* Full border for last disabled button in dark mode */
 }
 
 /* Dark mode hover effects */
@@ -285,24 +265,21 @@
 @media (prefers-color-scheme: dark) {
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
     background-color: #1f2937 !important;
-    border: 1px solid #374151 !important;
-    border-right: 0 !important;
+    border-color: #374151 !important;
     color: #9ca3af !important;
   }
   
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link {
-    border: 1px solid #374151 !important;
+    border-right: 1px solid #374151 !important;
   }
   
   .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
     background-color: #374151 !important;
     color: white !important;
-    border: 1px solid #374151 !important;
-    border-right: 0 !important;
   }
   
   .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100:last-child .datatable-pagination-list-item-link {
-    border: 1px solid #374151 !important;
+    border-right: 1px solid #374151 !important;
   }
   
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
@@ -310,15 +287,9 @@
     color: white !important;
   }
   
-  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden .datatable-pagination-list-item-link,
-  .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50 .datatable-pagination-list-item-link {
-    border: 1px solid #374151 !important;
-    border-right: 0 !important;
-  }
-  
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden:last-child .datatable-pagination-list-item-link,
   .datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50:last-child .datatable-pagination-list-item-link {
-    border: 1px solid #374151 !important;
+    border-right: 1px solid #374151 !important;
   }
 }
 
