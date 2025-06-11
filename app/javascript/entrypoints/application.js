@@ -52,3 +52,133 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
+
+  // Import Simple DataTables
+import { DataTable } from 'simple-datatables'
+
+// Initialize DataTables when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  initializeDataTables()
+})
+
+// Initialize DataTables for all tables
+function initializeDataTables() {
+  const timeLogsTable = document.getElementById('time-logs-table')
+  
+  if (timeLogsTable) {
+    const timeLogsDataTable = new DataTable(timeLogsTable, {
+      // Searching improvements
+      searchable: true,
+      sensitivity: "base", // Better search sensitivity for accented characters
+      searchQuerySeparator: " ", // Explicit separator for multi-term searches
+      
+      // Sorting improvements
+      sortable: true,
+      locale: "en-US", // Better locale-specific sorting
+      numeric: true, // Better numeric sorting for duration column
+      ignorePunctuation: true, // Ignore punctuation when sorting text
+      
+      // Pagination improvements
+      paging: true,
+      perPage: 10, // More reasonable default page size
+      perPageSelect: [5, 10, 25, 50, 100], // Better page size options
+      nextPrev: true,
+      firstLast: false, // Enable first/last buttons for better navigation
+      prevText: "",
+      nextText: "",
+      
+      // Appearance improvements
+      fixedHeight: false,
+      
+      // Column-specific configurations
+      columns: [
+        // Category column (index 0) - searchable and sortable
+        { select: 0, sortable: true, searchable: true },
+        // Date/Time column (index 1) - searchable and sortable (has data-order attribute for numeric sorting)
+        { select: 1, sortable: true, searchable: false },
+        // Duration column (index 2) - sortable and searchable (has data-order attribute for numeric sorting)
+        { select: 2, sortable: true, searchable: true },
+        // Notes column (index 3) - searchable and sortable
+        { select: 3, sortable: true, searchable: true },
+        // Actions column (index 4) - not sortable or searchable
+        { select: 4, sortable: false, searchable: false }
+      ],
+      
+      // Custom classes for better Tailwind integration
+      classes: {
+        active: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+        disabled: "opacity-50 cursor-not-allowed",
+      },
+      
+      // Enhanced labels
+      labels: {
+        placeholder: "Search time logs...",
+        perPage: "entries per page",
+        noRows: "No time logs found matching your criteria",
+        info: "Showing {start} to {end} of {rows} time logs",
+        noEntries: "No time logs available"
+      }
+    })
+  }
+
+  // Enhanced Categories Table configuration
+  const categoriesTable = document.getElementById('categories-table')
+  if (categoriesTable) {
+    new DataTable(categoriesTable, {
+      // Enhanced searching
+      searchable: true,
+      sensitivity: "base",
+      searchQuerySeparator: " ",
+      
+      // Enhanced sorting
+      sortable: true,
+      locale: "en-US",
+      ignorePunctuation: true,
+      
+      // Enhanced pagination
+      paging: true,
+      perPage: 10,
+      perPageSelect: [5, 10, 15, 25, 50],
+      nextPrev: true,
+      firstLast: false,
+      prevText: "",
+      nextText: "",
+      
+      // Appearance
+      fixedHeight: false,
+      
+      columns: [
+        // Name column (index 0)
+        { select: 0, sortable: true, searchable: true },
+        // Description column (index 1)
+        { select: 1, sortable: true, searchable: true },
+        // Actions column (index 2)
+        { select: 2, sortable: false, searchable: false }
+      ],
+      
+      classes: {
+        active: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+        disabled: "opacity-50 cursor-not-allowed"
+      },
+      
+      labels: {
+        placeholder: "Search categories ...",
+        perPage: "entries per page",
+        noRows: "No categories found",
+        info: "Showing {start} to {end} of {rows} categories"
+      }
+    })
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
