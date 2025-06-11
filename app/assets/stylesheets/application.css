@@ -106,6 +106,7 @@
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
   border-radius: 0.5rem 0 0 0.5rem !important;
   margin-left: 0 !important;
+  border-left: 1px solid #d1d5db !important;
 }
 
 /* Last Button */
@@ -124,6 +125,7 @@
 .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
   background-color: #eff6ff !important;
   color: #2563eb !important;
+  border-color: #2563eb !important;
 }
 
 /* Hover Effects */
@@ -174,8 +176,15 @@
 /* Dark Mode Pagination */
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
   background-color: #1f2937 !important;
-  border-color: #374151 !important;
+  border-top: 1px solid #374151 !important;
+  border-bottom: 1px solid #374151 !important;
+  border-left: 1px solid #374151 !important;
+  border-right: 0 !important;
   color: #9ca3af !important;
+}
+
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
+  border-left: 1px solid #374151 !important;
 }
 
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link,
@@ -183,14 +192,19 @@
   border-right: 1px solid #374151 !important;
 }
 
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link,
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900 .datatable-pagination-list-item-link {
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
+  background-color: #1e40af !important;
+  color: white !important;
+  border-color: #1e40af !important;
+}
+
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
   background-color: #374151 !important;
   color: white !important;
 }
 
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100):not(.dark\:bg-blue-900) .datatable-pagination-list-item-link:hover {
-  background-color: #374151 !important;
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link:hover {
+  background-color: #1d4ed8 !important;
   color: white !important;
 }
 
@@ -223,8 +237,15 @@
 
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
     background-color: #1f2937 !important;
-    border-color: #374151 !important;
+    border-top: 1px solid #374151 !important;
+    border-bottom: 1px solid #374151 !important;
+    border-left: 1px solid #374151 !important;
+    border-right: 0 !important;
     color: #9ca3af !important;
+  }
+
+  .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:first-child .datatable-pagination-list-item-link {
+    border-left: 1px solid #374151 !important;
   }
 
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:last-child .datatable-pagination-list-item-link,
@@ -233,12 +254,18 @@
   }
 
   .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
-    background-color: #374151 !important;
+    background-color: #1e40af !important;
     color: white !important;
+    border-color: #1e40af !important;
   }
 
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item:not(.bg-blue-100) .datatable-pagination-list-item-link:hover {
     background-color: #374151 !important;
+    color: white !important;
+  }
+
+  .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link:hover {
+    background-color: #1d4ed8 !important;
     color: white !important;
   }
 }
