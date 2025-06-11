@@ -47,7 +47,7 @@
               </td>
 
               <!-- Date/Time Column -->
-              <td class="px-6 py-4">
+              <td class="px-6 py-4" data-order="<%= time_log.start_time.to_i %>">
                 <div class="text-gray-900 dark:text-white font-medium">
                   <%= time_log.start_time.strftime("%b %d, %Y") %>
                 </div>
@@ -62,7 +62,7 @@
               </td>
               
               <!-- Duration Column -->
-              <td class="px-6 py-4">
+              <td class="px-6 py-4" data-order="<%= time_log.end_time ? time_log.duration_in_minutes.to_i : 0 %>">
                 <div class="text-gray-900 dark:text-white font-medium">
                   <%= time_log.duration_formatted %>
                 </div>
