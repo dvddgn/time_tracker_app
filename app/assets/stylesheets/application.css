@@ -137,7 +137,7 @@
   }
 }
 
-/* Pagination buttons */
+/* UPDATED PAGINATION STYLES - Base pagination button styling with consistent sizing */
 .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
   background-color: white !important;
   border: 1px solid #d1d5db !important;
@@ -145,39 +145,72 @@
   padding: 0.5rem 0.75rem !important;
   border-radius: 0.375rem !important;
   margin-left: 0.25rem !important;
+  /* Add consistent sizing */
+  min-width: 2.5rem !important; /* 40px minimum width */
+  height: 2.5rem !important; /* 40px height */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
 }
 
+/* Remove background from list items - this fixes the blue background outside border */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+/* Active pagination button - only style the button, not the list item */
+.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
+  background-color: #3b82f6 !important; /* Blue background */
+  color: white !important; /* White text */
+  border-color: #3b82f6 !important; /* Blue border */
+}
+
+/* Dark mode pagination styles */
 .dark .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
   background-color: #374151 !important;
   border-color: #6b7280 !important;
   color: #f9fafb !important;
 }
 
+.dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\:bg-blue-900 .datatable-pagination-list-item-link {
+  background-color: #1d4ed8 !important; /* Darker blue for dark mode */
+  color: #f0f9ff !important;
+  border-color: #1d4ed8 !important;
+}
+
+/* Media query for dark mode pagination */
 @media (prefers-color-scheme: dark) {
   .datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link {
     background-color: #374151 !important;
     border-color: #6b7280 !important;
     color: #f9fafb !important;
   }
-}
-
-/* Active pagination button - target the li with Tailwind classes */
-.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
-  background-color: #dbeafe !important;
-  color: #1e40af !important;
-  border-color: #3b82f6 !important;
-}
-
-.dark .datatable-wrapper .datatable-bottom .datatable-pagination .dark\\:bg-blue-900 .datatable-pagination-list-item-link {
-  background-color: #1e3a8a !important;
-  color: #93c5fd !important;
-}
-
-@media (prefers-color-scheme: dark) {
+  
   .datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link {
-    background-color: #1e3a8a !important;
-    color: #93c5fd !important;
+    background-color: #1d4ed8 !important;
+    color: #f0f9ff !important;
+    border-color: #1d4ed8 !important;
   }
+}
+
+/* Pagination hover effects */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item-link:hover:not(.disabled) {
+  background-color: #f3f4f6 !important;
+  border-color: #9ca3af !important;
+}
+
+.datatable-wrapper .datatable-bottom .datatable-pagination .bg-blue-100 .datatable-pagination-list-item-link:hover {
+  background-color: #2563eb !important; /* Darker blue on hover */
+}
+
+/* Disabled pagination state */
+.datatable-wrapper .datatable-bottom .datatable-pagination .datatable-pagination-list-item.datatable-hidden .datatable-pagination-list-item-link,
+.datatable-wrapper .datatable-bottom .datatable-pagination .opacity-50 .datatable-pagination-list-item-link {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
 }
 
 /* Info text */
