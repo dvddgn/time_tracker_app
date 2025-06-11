@@ -78,6 +78,10 @@
   @apply px-4; 
 }
 
+.datatable-selector {
+  @apply cursor-pointer;
+}
+
 /* ========== PAGINATION ========== */
 
 /* Base pagination button styles */
