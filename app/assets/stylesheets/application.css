@@ -18,6 +18,8 @@
  @source "../../../app/helpers/**/*.rb";
  @source "../../../node_modules/flowbite";
 
+ /* PAGINATION */
+
  /* All pagination buttons - base styles */
 .datatable-pagination-list-item-link {
   @apply bg-white text-gray-500 border border-gray-300;
@@ -44,6 +46,36 @@
 
 .datatable-pagination-list-item.datatable-active .datatable-pagination-list-item-link:hover {
   @apply bg-blue-100 text-blue-700;
+  @apply dark:bg-blue-800 dark:text-blue-200;
+}
+
+/* TABLE HEADER */
+
+/* Table header sorter buttons - base styles */
+.datatable-sorter {
+  @apply bg-white text-gray-700;
+  @apply dark:bg-gray-800 dark:text-gray-400;
+  @apply text-xs font-medium uppercase tracking-wide;
+  @apply cursor-pointer;
+}
+
+/* Hover states for sorter buttons */
+.datatable-sorter:hover {
+  @apply bg-gray-50 text-gray-900;
+  @apply dark:bg-gray-700 dark:text-white;
+}
+
+/* Active/sorted column styling */
+.datatable-ascending .datatable-sorter,
+.datatable-descending .datatable-sorter {
+  @apply bg-blue-50 text-blue-700;
+  @apply dark:bg-blue-900 dark:text-blue-300;
+}
+
+/* Active/sorted column hover */
+.datatable-ascending .datatable-sorter:hover,
+.datatable-descending .datatable-sorter:hover {
+  @apply bg-blue-100 text-blue-800;
   @apply dark:bg-blue-800 dark:text-blue-200;
 }
 
