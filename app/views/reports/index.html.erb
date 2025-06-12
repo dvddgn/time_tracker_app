@@ -1,17 +1,117 @@
 <% content_for :title, "Dashboard" %>
 
-<div class="p-4 mt-14 bg-white dark:bg-gray-800 border-1 border-gray-200 rounded-lg dark:border-gray-700">
+<div class="p-4 mt-14 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg dark:border-gray-700">
   <!-- Header Section -->
   <div class="mb-6">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Time Tracking Dashboard</h1>
-    <p class="text-gray-600 dark:text-gray-400">Insights and analytics for your productivity patterns</p>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Time Tracking Dashboard</h1>
+        <p class="text-gray-600 dark:text-gray-400">
+          Insights and analytics for your productivity patterns
+          <% if params[:start_date] && params[:end_date] %>
+            <span class="block text-sm mt-1">
+              Showing data from <%= Date.parse(params[:start_date]).strftime('%B %d') %> to <%= Date.parse(params[:end_date]).strftime('%B %d, %Y') %>
+            </span>
+          <% end %>
+        </p>
+      </div>
+      
+      <!-- Date Range Filter -->
+      <div class="mt-4 sm:mt-0">
+        <div class="flex items-center space-x-2">
+          <div class="relative">
+            <input type="date" id="start-date" 
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   value="<%= params[:start_date] || Date.current.beginning_of_week.strftime('%Y-%m-%d') %>">
+          </div>
+          <span class="text-gray-500 dark:text-gray-400">to</span>
+          <div class="relative">
+            <input type="date" id="end-date" 
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   value="<%= params[:end_date] || (Date.current.beginning_of_week + 4.days).strftime('%Y-%m-%d') %>">
+          </div>
+          <button type="button" id="apply-filter" 
+                  class="px-3 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Apply
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
+            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-blue-900 dark:text-blue-100">Total Hours</p>
+            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              <%= @category_data.sum { |cat| cat[:hours] } %>h
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-green-100 dark:bg-green-800 rounded-lg">
+            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-green-900 dark:text-green-100">Categories</p>
+            <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+              <%= @category_data.length %>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-purple-100 dark:bg-purple-800 rounded-lg">
+            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-purple-900 dark:text-purple-100">Daily Average</p>
+            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">
+              <%= (@daily_data.sum { |day| day[:hours] } / 7.0).round(1) %>h
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-orange-100 dark:bg-orange-800 rounded-lg">
+            <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-orange-900 dark:text-orange-100">Total Entries</p>
+            <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">
+              <%= @daily_data.sum { |day| day[:entries] } %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Dashboard Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
     
     <!-- Category Breakdown Pie Chart -->
-    <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Time by Category</h5>
@@ -29,7 +129,7 @@
       
       <!-- Category Legend -->
       <div class="grid grid-cols-1 border-gray-200 border-t dark:border-gray-700 pt-4">
-        <div class="space-y-2">
+        <div class="space-y-2 max-h-48 overflow-y-auto">
           <% @category_data.each_with_index do |category, index| %>
             <div class="flex items-center justify-between">
               <div class="flex items-center">
@@ -45,9 +145,8 @@
       </div>
     </div>
 
-    <!-- Placeholder for next charts -->
     <!-- Daily Progress Line Chart -->
-    <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-lg  dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Daily Progress</h5>
@@ -69,7 +168,7 @@
           <div>
             <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Average Daily</dt>
             <dd class="leading-none text-xl font-bold text-blue-600 dark:text-blue-400">
-              <%= (@daily_data.sum { |day| day[:hours] } / 5.0).round(1) %>h
+              <%= (@daily_data.sum { |day| day[:hours] } / 7.0).round(1) %>h
             </dd>
           </div>
           <div>
@@ -90,7 +189,7 @@
     </div>
     
     <!-- Weekly Hours Column Chart -->
-    <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-lg  dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Weekly Overview</h5>
@@ -98,7 +197,7 @@
         </div>
         <div class="flex items-center">
           <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-purple-900 dark:text-purple-300">
-            <% avg_hours = (@daily_data.sum { |day| day[:hours] } / 5.0).round(1) %>
+            <% avg_hours = (@daily_data.sum { |day| day[:hours] } / 7.0).round(1) %>
             <%= avg_hours %>h daily average
           </span>
         </div>
@@ -129,7 +228,7 @@
     </div>
     
     <!-- Top Categories Horizontal Bar Chart -->
-    <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-lg  dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Top Work Categories</h5>
@@ -178,4 +277,41 @@
     weeklyData: <%= raw @weekly_data.to_json %>,
     topCategories: <%= raw @top_categories.to_json %>
   };
+
+  // Date range filter functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const applyButton = document.getElementById('apply-filter');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+
+    if (applyButton && startDateInput && endDateInput) {
+      applyButton.addEventListener('click', function() {
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+        
+        if (!startDate || !endDate) {
+          alert('Please select both start and end dates');
+          return;
+        }
+        
+        if (new Date(startDate) > new Date(endDate)) {
+          alert('Start date must be before end date');
+          return;
+        }
+        
+        // Add loading state to button
+        applyButton.innerHTML = `
+          <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white inline-block mr-2"></div>
+          Applying...
+        `;
+        applyButton.disabled = true;
+        
+        // Reload page with date parameters
+        const url = new URL(window.location.href);
+        url.searchParams.set('start_date', startDate);
+        url.searchParams.set('end_date', endDate);
+        window.location.href = url.toString();
+      });
+    }
+  });
 </script>
