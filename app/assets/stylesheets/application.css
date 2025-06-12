@@ -116,3 +116,39 @@
 .datatable-disabled button:hover {
   @apply bg-gray-100 text-gray-300 dark:bg-gray-700 dark:text-gray-600;
 }
+
+/* ====================== APEX CHARTS STYLES ====================== */
+
+/* ========== SCROLLBAR ON TABLES BELOW CHARTS ========== */
+
+.custom-scrollbar {
+  scrollbar-color: #cbd5e1 #f1f5f9; /* light mode default */
+}
+
+/* Dark mode via media query */
+@media (prefers-color-scheme: dark) {
+  .custom-scrollbar {
+    scrollbar-color: #6b7280 #374151; /* lighter - gray-500 thumb, gray-700 track */
+  }
+}
+
+/* ========== MENU FOR CHART DOWNLOAD OPTIONS ========== */
+
+/* Apply only in dark mode */
+@media (prefers-color-scheme: dark) {
+  .apexcharts-menu {
+    background-color: #374151 !important;
+    border: 1px solid #4b5563 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .apexcharts-menu-item {
+    color: #f3f4f6 !important;
+    border-bottom: 1px solid #4b5563 !important;
+  }
+
+  .apexcharts-menu-item:hover {
+    background-color: #4b5563 !important;
+    color: #ffffff !important;
+  }
+}
