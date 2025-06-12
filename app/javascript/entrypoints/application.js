@@ -300,8 +300,8 @@ function initializeCategoryChart() {
             fontWeight: '500'
           },
           formatter: function(val, opts) {
-            const hours = categoryData[opts.seriesIndex].hours;
-            return hours + 'h';
+            const category = categoryData[opts.seriesIndex];
+            return category.percentage + '%';
           },
           dropShadow: {
             enabled: false
