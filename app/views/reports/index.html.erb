@@ -113,7 +113,7 @@
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
         <div class="flex-1 min-w-0">
-          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Time Distribution</h5>
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Time Distribution</h5>
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">How you spend your working hours</p>
         </div>
         <div class="flex items-center flex-shrink-0">
@@ -150,7 +150,7 @@
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
         <div class="flex-1 min-w-0">
-          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Daily Progress</h5>
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Daily Progress</h5>
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours worked each day this week</p>
         </div>
         <div class="flex items-center flex-shrink-0">
@@ -170,7 +170,7 @@
           <div class="grid grid-cols-2 gap-4 text-center w-full">
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Highest Day</dt>
-              <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
+              <dd class="leading-tight text-lg font-bold text-green-600 dark:text-green-400">
                 <% highest_day = @daily_data&.max_by { |day| day[:hours] } %>
                 <% if highest_day && highest_day[:hours] > 0 %>
                   <%= highest_day[:day] %> - <%= highest_day[:hours] %>h
@@ -181,7 +181,7 @@
             </div>
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Lowest Day</dt>
-              <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
+              <dd class="leading-tight text-lg font-bold text-blue-600 dark:text-blue-400">
                 <% lowest_day = @daily_data&.min_by { |day| day[:hours] } %>
                 <% if lowest_day && lowest_day[:hours] > 0 %>
                   <%= lowest_day[:day] %> - <%= lowest_day[:hours] %>h
@@ -199,7 +199,7 @@
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
         <div class="flex-1 min-w-0">
-          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Category Overview</h5>
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Category Overview</h5>
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours spent per category</p>
         </div>
         <div class="flex items-center flex-shrink-0">
@@ -218,7 +218,7 @@
           <div class="grid grid-cols-2 gap-4 text-center w-full">
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Most Used</dt>
-              <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
+              <dd class="leading-tight text-lg font-bold text-green-600 dark:text-green-400">
                 <% most_category = @category_data&.max_by { |cat| cat[:hours] } %>
                 <% if most_category %>
                   <%= most_category[:name] %> - <%= most_category[:hours] %>h
@@ -229,7 +229,7 @@
             </div>
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Least Used</dt>
-              <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
+              <dd class="leading-tight text-lg font-bold text-blue-600 dark:text-blue-400">
                 <% least_category = @category_data&.min_by { |cat| cat[:hours] } %>
                 <% if least_category %>
                   <%= least_category[:name] %> - <%= least_category[:hours] %>h
@@ -247,7 +247,7 @@
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
         <div class="flex-1 min-w-0">
-          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Top Categories</h5>
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Top Categories</h5>
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Most time-intensive activities</p>
         </div>
         <div class="flex items-center flex-shrink-0">
