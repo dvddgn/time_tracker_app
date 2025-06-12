@@ -13,29 +13,42 @@
       
       <!-- Date Range Filter -->
       <div class="mt-4">
-        <!-- Quick Filter Buttons -->
-        <div class="mb-3">
-          <div class="flex flex-wrap gap-2">
-            <button type="button" data-period="this-week" 
-                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
-              This Week
-            </button>
-            <button type="button" data-period="last-week" 
-                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
-              Last Week
-            </button>
-            <button type="button" data-period="this-month" 
-                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
-              This Month
-            </button>
-            <button type="button" data-period="last-month" 
-                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
-              Last Month
-            </button>
-          </div>
-        </div>
-        
         <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+          <!-- Quick Filter Dropdown -->
+          <div class="relative inline-block">
+                          <button id="quick-filter-button" data-dropdown-toggle="quick-filter-dropdown" 
+                     class="w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" 
+                     type="button">
+              <!-- Filter SVG Icon -->
+              <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/>
+              </svg>
+              Quick Filter
+              <!-- Dropdown Arrow -->
+              <svg class="w-2.5 h-2.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div id="quick-filter-dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44 dark:bg-gray-700 absolute mt-1">
+              <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="quick-filter-button">
+                <li>
+                  <a href="#" data-period="this-week" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">This Week</a>
+                </li>
+                <li>
+                  <a href="#" data-period="last-week" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last Week</a>
+                </li>
+                <li>
+                  <a href="#" data-period="this-month" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">This Month</a>
+                </li>
+                <li>
+                  <a href="#" data-period="last-month" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last Month</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
           <!-- Date Range Group -->
           <div class="flex items-center space-x-2">
             <!-- Start Date Picker -->
@@ -334,7 +347,9 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     // Quick filter functionality
-    const quickFilterButtons = document.querySelectorAll('.quick-filter-btn');
+    const quickFilterButton = document.getElementById('quick-filter-button');
+    const quickFilterDropdown = document.getElementById('quick-filter-dropdown');
+    const quickFilterOptions = document.querySelectorAll('.quick-filter-option');
     const startDatePicker = document.getElementById('start-datepicker');
     const endDatePicker = document.getElementById('end-datepicker');
     const applyFilterButton = document.getElementById('apply-filter');
@@ -417,31 +432,44 @@
       return result;
     }
 
-    // Function to update active button state
-    function updateActiveButton(activeButton) {
-      quickFilterButtons.forEach(btn => {
-        btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
-        btn.classList.add('dark:bg-gray-800', 'dark:text-gray-300', 'dark:border-gray-600');
-      });
-      
-      if (activeButton) {
-        activeButton.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
-        activeButton.classList.remove('dark:bg-gray-800', 'dark:text-gray-300', 'dark:border-gray-600');
-        activeButton.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-      }
+    // Toggle dropdown visibility
+    function toggleDropdown() {
+      quickFilterDropdown.classList.toggle('hidden');
     }
 
-    // Quick filter button click handlers
-    quickFilterButtons.forEach(button => {
-      button.addEventListener('click', function() {
+    // Close dropdown
+    function closeDropdown() {
+      quickFilterDropdown.classList.add('hidden');
+    }
+
+    // Quick filter button click handler
+    quickFilterButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleDropdown();
+    });
+
+    // Quick filter option click handlers
+    quickFilterOptions.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
         const period = this.dataset.period;
         const dateRange = getDateRange(period);
         
         if (dateRange.start && dateRange.end) {
           startDatePicker.value = dateRange.start;
           endDatePicker.value = dateRange.end;
-          updateActiveButton(this);
+          
+          // Update button text to show selected period
+          const buttonTextNode = quickFilterButton.childNodes[2]; // The text node between SVGs
+          if (buttonTextNode && buttonTextNode.nodeType === Node.TEXT_NODE) {
+            buttonTextNode.textContent = this.textContent;
+          }
+          
+          // Close dropdown
+          closeDropdown();
           
           // Automatically apply the filter
           applyFilterButton.click();
@@ -449,10 +477,22 @@
       });
     });
 
-    // Reset active button when manual date changes occur
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!quickFilterButton.contains(e.target) && !quickFilterDropdown.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // Reset dropdown when manual date changes occur
     [startDatePicker, endDatePicker].forEach(input => {
       input.addEventListener('change', function() {
-        updateActiveButton(null);
+        // Reset button text
+        const buttonTextNode = quickFilterButton.childNodes[2];
+        if (buttonTextNode && buttonTextNode.nodeType === Node.TEXT_NODE) {
+          buttonTextNode.textContent = 'Quick Filter';
+        }
+        closeDropdown();
       });
     });
 
