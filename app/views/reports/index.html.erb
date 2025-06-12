@@ -111,14 +111,14 @@
     
     <!-- Category Breakdown Pie Chart -->
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
-      <div class="flex justify-between items-start mb-2">
-        <div>
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Time Distribution</h5>
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">How you spend your working hours</p>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center flex-shrink-0">
           <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-blue-900 dark:text-blue-300">
-            <%= @category_data.sum { |cat| cat[:hours] } %> total hours
+            <%= @category_data.sum { |cat| cat[:hours] } %>h total
           </span>
         </div>
       </div>
@@ -148,15 +148,15 @@
 
     <!-- Daily Progress Line Chart -->
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
-      <div class="flex justify-between items-start mb-2">
-        <div>
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Daily Progress</h5>
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours worked each day this week</p>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center flex-shrink-0">
           <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
             <% avg_hours = (@daily_data.sum { |day| day[:hours] } / @daily_data.length.to_f).round(1) %>
-            <%= avg_hours %>h daily average
+            <%= avg_hours %>h avg
           </span>
         </div>
       </div>
@@ -197,14 +197,14 @@
     
     <!-- Weekly Hours Column Chart -->
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
-      <div class="flex justify-between items-start mb-2">
-        <div>
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Category Overview</h5>
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours spent per category</p>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center flex-shrink-0">
           <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-purple-900 dark:text-purple-300">
-            <%= @category_data.length %> categories tracked
+            <%= @category_data.length %> tracked
           </span>
         </div>
       </div>
@@ -245,12 +245,12 @@
     
     <!-- Top Categories Horizontal Bar Chart -->
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
-      <div class="flex justify-between items-start mb-2">
-        <div>
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Top Categories</h5>
-          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Most time-intensive activities of all time</p>
+          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Most time-intensive activities</p>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center flex-shrink-0">
           <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-orange-900 dark:text-orange-300">
             Top <%= @top_categories.length %> categories
           </span>
