@@ -651,6 +651,7 @@ function initializeTopCategoriesChart() {
       plotOptions: {
         bar: {
           borderRadius: 6,
+          borderRadiusApplication: "end",
           horizontal: true,
           distributed: false,
           dataLabels: {
