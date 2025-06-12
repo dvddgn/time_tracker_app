@@ -195,42 +195,78 @@ function showEmptyChart(chartId, message = 'No data available') {
 function initializeCategoryChart() {
   const chartId = 'category-pie-chart';
   const categoryData = window.dashboardData?.categoryData || [];
+  let chart; // Store chart instance
   
   if (categoryData.length === 0) {
     showEmptyChart(chartId, 'No category data available');
     return;
   }
   
-  const chartOptions = {
-    series: categoryData.map(cat => cat.hours),
-    labels: categoryData.map(cat => cat.name),
-    colors: chartDefaults.colors,
-    chart: {
-      height: 340,
-      type: "pie",
-      fontFamily: chartDefaults.fontFamily,
-      animations: chartDefaults.animations,
-      toolbar: chartDefaults.toolbar
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: function(val, opts) {
-        return categoryData[opts.seriesIndex].percentage + '%';
-      }
-    },
-    legend: { show: false },
-    tooltip: {
-      y: {
-        formatter: function(value, { seriesIndex }) {
-          const category = categoryData[seriesIndex];
-          return `${category.hours} hours (${category.percentage}%)`;
+  function renderChart() {
+    // Detect dark mode
+    const isDarkMode = document.documentElement.classList.contains('dark') || 
+                      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const strokeColor = isDarkMode ? '#374151' : '#ffffff';
+    
+    const chartOptions = {
+      series: categoryData.map(cat => cat.hours),
+      labels: categoryData.map(cat => cat.name),
+      colors: chartDefaults.colors,
+      chart: {
+        height: 340,
+        type: "pie",
+        fontFamily: chartDefaults.fontFamily,
+        animations: chartDefaults.animations,
+        toolbar: chartDefaults.toolbar
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: [strokeColor]
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: function(val, opts) {
+          return categoryData[opts.seriesIndex].percentage + '%';
+        }
+      },
+      legend: { show: false },
+      tooltip: {
+        y: {
+          formatter: function(value, { seriesIndex }) {
+            const category = categoryData[seriesIndex];
+            return `${category.hours} hours (${category.percentage}%)`;
+          }
         }
       }
-    }
-  };
+    };
 
-  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-  chart.render();
+    // Destroy existing chart if it exists
+    if (chart) {
+      chart.destroy();
+    }
+    
+    chart = new ApexCharts(document.getElementById(chartId), chartOptions);
+    chart.render();
+  }
+
+  // Initial render
+  renderChart();
+  
+  // Listen for manual theme changes (class changes on html element)
+  const observer = new MutationObserver(() => {
+    renderChart();
+  });
+  
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    renderChart();
+  });
 }
 
 function initializeDailyChart() {
