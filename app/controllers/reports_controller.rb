@@ -70,12 +70,12 @@ class ReportsController < ApplicationController
   end
 
   def weekly_totals
-    # More efficient mapping from daily data
-    @daily_data ||= daily_breakdown
-    @daily_data.map do |day_data|
+    # Use category data for column chart
+    @category_data ||= category_breakdown
+    @category_data.map do |cat_data|
       {
-        x: day_data[:day][0..2], # Mon, Tue, Wed, etc.
-        y: day_data[:hours]
+        x: cat_data[:name].length > 12 ? cat_data[:name][0..11] + '...' : cat_data[:name], # Truncate long names
+        y: cat_data[:hours]
       }
     end
   end

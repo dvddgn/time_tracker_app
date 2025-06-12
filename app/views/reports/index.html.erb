@@ -187,13 +187,12 @@
     <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
-          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Weekly Overview</h5>
-          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Day-by-day hour comparison</p>
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Category Overview</h5>
+          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours spent per category</p>
         </div>
         <div class="flex items-center">
-          <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-purple-900 dark:text-purple-300">
-            <% avg_hours = (@daily_data.sum { |day| day[:hours] } / @daily_data.length.to_f).round(1) %>
-            <%= avg_hours %>h daily average
+          <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+            <%= @category_data.length %> categories tracked
           </span>
         </div>
       </div>
@@ -206,17 +205,17 @@
         <div class="h-32 flex items-center">
           <div class="grid grid-cols-2 gap-4 text-center w-full">
             <div>
-              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Highest Day</dt>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Top Category</dt>
               <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
-                <% highest_day = @daily_data.max_by { |day| day[:hours] } %>
-                <%= highest_day[:day] %> - <%= highest_day[:hours] %>h
+                <% top_category = @category_data.max_by { |cat| cat[:hours] } %>
+                <%= top_category[:name] %> - <%= top_category[:hours] %>h
               </dd>
             </div>
             <div>
-              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Lowest Day</dt>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Least Used</dt>
               <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
-                <% lowest_day = @daily_data.min_by { |day| day[:hours] } %>
-                <%= lowest_day[:day] %> - <%= lowest_day[:hours] %>h
+                <% least_category = @category_data.min_by { |cat| cat[:hours] } %>
+                <%= least_category[:name] %> - <%= least_category[:hours] %>h
               </dd>
             </div>
           </div>
