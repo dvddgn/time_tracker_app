@@ -210,9 +210,9 @@
       </div>
       
       <!-- Column Chart Container -->
-      <div id="weekly-column-chart" class="py-6"></div>
+      <div id="category-column-chart" class="py-6"></div>
       
-      <!-- Weekly Insights -->
+      <!-- Category Insights -->
       <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
         <div class="h-32 flex items-center">
           <div class="grid grid-cols-2 gap-4 text-center w-full">
@@ -270,7 +270,7 @@
                   <div class="flex items-center justify-center w-6 h-6 bg-gray-100 dark:bg-gray-700 rounded-full mr-3">
                     <span class="text-xs font-medium text-gray-600 dark:text-gray-300"><%= index + 1 %></span>
                   </div>
-                  <span class="text-sm font-medium text-gray-900 dark:text-white"><%= category[:category] %></span>
+                  <span class="text-sm font-medium text-gray-900 dark:text-white"><%= category[:name] %></span>
                 </div>
                 <div class="flex items-center space-x-2 mr-4">
                   <span class="text-sm font-bold text-blue-600 dark:text-blue-400"><%= category[:formatted] %></span>
@@ -292,7 +292,7 @@
   window.dashboardData = {
     categoryData: <%= raw @category_data.to_json %>,
     dailyData: <%= raw @daily_data.to_json %>,
-    weeklyData: <%= raw @weekly_data.to_json %>,
+    categoryOverviewData: <%= raw @category_overview_data.to_json %>,
     topCategories: <%= raw @top_categories.to_json %>
   };
 

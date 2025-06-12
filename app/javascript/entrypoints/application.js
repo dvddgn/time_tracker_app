@@ -360,19 +360,19 @@ function initializeDailyChart() {
   });
 }
 
-function initializeWeeklyChart() {
-  const chartId = 'weekly-column-chart';
-  const weeklyData = window.dashboardData?.weeklyData || [];
+function initializeCategoryOverviewChart() {
+  const chartId = 'category-column-chart';
+  const categoryOverviewData = window.dashboardData?.categoryOverviewData || [];
   
-  if (weeklyData.length === 0 || weeklyData.every(day => day.y === 0)) {
-    showEmptyChart(chartId, 'No weekly activity data');
+  if (categoryOverviewData.length === 0 || categoryOverviewData.every(category => category.y === 0)) {
+    showEmptyChart(chartId, 'No category overview data');
     return;
   }
   
   const chartOptions = {
     series: [{
       name: "Hours",
-      data: weeklyData,
+      data: categoryOverviewData,
       color: chartDefaults.colors[4]
     }],
     chart: {
@@ -404,8 +404,8 @@ function initializeWeeklyChart() {
     tooltip: {
       y: {
         formatter: (value, { dataPointIndex }) => {
-          const item = weeklyData[dataPointIndex];
-          return `${item.y} hours worked on ${item.x}day`;
+          const item = categoryOverviewData[dataPointIndex];
+          return `${item.y} hours worked in ${item.x}`;
         }
       }
     }
@@ -449,7 +449,7 @@ function initializeTopCategoriesChart() {
       formatter: val => val > 0 ? val + 'h' : ''
     },
     xaxis: {
-      categories: topCategories.map(cat => cat.category)
+      categories: topCategories.map(cat => cat.name)
     },
     yaxis: {
       labels: {
@@ -477,7 +477,7 @@ function initializeDashboardCharts() {
   const charts = [
     { id: 'category-pie-chart', init: initializeCategoryChart },
     { id: 'daily-line-chart', init: initializeDailyChart },
-    { id: 'weekly-column-chart', init: initializeWeeklyChart },
+    { id: 'category-column-chart', init: initializeCategoryOverviewChart },
     { id: 'top-categories-chart', init: initializeTopCategoriesChart }
   ];
 

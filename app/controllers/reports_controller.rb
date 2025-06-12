@@ -2,7 +2,7 @@ class ReportsController < ApplicationController
   def index
     @category_data = category_breakdown
     @daily_data = daily_breakdown
-    @weekly_data = weekly_totals
+    @category_overview_data = category_overview_data
     @top_categories = top_categories_data
   end
 
@@ -69,7 +69,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def weekly_totals
+  def category_overview_data
     # Use category data for column chart
     @category_data ||= category_breakdown
     @category_data.map do |cat_data|
@@ -94,7 +94,7 @@ class ReportsController < ApplicationController
     
     results.map do |result|
       {
-        category: result.name,
+        name: result.name,
         hours: (result.total_minutes / 60.0).round(1),
         formatted: "#{(result.total_minutes / 60.0).round(1)}h",
         percentage: calculate_percentage(result.total_minutes, total_minutes)
