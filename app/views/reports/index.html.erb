@@ -207,15 +207,23 @@
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Most Used</dt>
               <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
-                <% most_category = @category_data.max_by { |cat| cat[:hours] } %>
-                <%= most_category[:name] %> - <%= most_category[:hours] %>h
+                <% most_category = @category_data&.max_by { |cat| cat[:hours] } %>
+                <% if most_category %>
+                  <%= most_category[:name] %> - <%= most_category[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
               </dd>
             </div>
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Least Used</dt>
               <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
-                <% least_category = @category_data.min_by { |cat| cat[:hours] } %>
-                <%= least_category[:name] %> - <%= least_category[:hours] %>h
+                <% least_category = @category_data&.min_by { |cat| cat[:hours] } %>
+                <% if least_category %>
+                  <%= least_category[:name] %> - <%= least_category[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
               </dd>
             </div>
           </div>
