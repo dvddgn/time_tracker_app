@@ -243,117 +243,147 @@ const chartDefaults = {
 function initializeCategoryChart() {
   const chartId = 'category-pie-chart';
   const categoryData = window.dashboardData?.categoryData || [];
-  
-  showChartLoading(chartId);
+  let chart; // Store chart instance for updates
   
   if (categoryData.length === 0) {
     showEmptyChart(chartId, 'No category data available');
     return;
   }
   
-  // Clear the loading state before rendering
-  clearChartContainer(chartId);
-  
-  try {
-    const chartOptions = {
-      series: categoryData.map(cat => cat.hours),
-      labels: categoryData.map(cat => cat.name),
-      colors: chartDefaults.colors,
-      chart: {
-        height: 340,
-        width: "100%",
-        type: "pie",
-        fontFamily: chartDefaults.fontFamily,
-        animations: chartDefaults.animations,
-        toolbar: chartDefaults.toolbar
-      },
-      stroke: {
-        colors: ["transparent"],
-        lineCap: "",
-        width: 0
-      },
-      plotOptions: {
-        pie: {
-          labels: {
-            show: true,
-          },
-          size: "100%",
-          dataLabels: {
-            offset: -20
-          },
-          donut: {
-            size: '0%'
-          }
-        },
-      },
-      dataLabels: {
-        enabled: true,
-        style: {
-          fontSize: '11px',
-          colors: ['#ffffff'], 
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: '500'
-        },
-        formatter: function(val, opts) {
-          const hours = categoryData[opts.seriesIndex].hours;
-          return hours + 'h';
-        },
-        dropShadow: {
-          enabled: false
-        }
-      },
-      legend: {
-        show: false, // We'll use custom legend
-      },
-      tooltip: {
-        enabled: true,
-        style: {
+  function renderChart() {
+    showChartLoading(chartId);
+    clearChartContainer(chartId);
+    
+    try {
+      // Detect dark mode
+      const isDarkMode = document.documentElement.classList.contains('dark') || 
+                        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const borderColor = isDarkMode ? "#374151" : "#ffffff"; // Dark gray for dark mode, white for light mode
+      
+      const chartOptions = {
+        series: categoryData.map(cat => cat.hours),
+        labels: categoryData.map(cat => cat.name),
+        colors: chartDefaults.colors,
+        chart: {
+          height: 340,
+          width: "100%",
+          type: "pie",
           fontFamily: chartDefaults.fontFamily,
+          animations: chartDefaults.animations,
+          toolbar: chartDefaults.toolbar
         },
-        y: {
-          formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-            const category = categoryData[seriesIndex];
-            return `${category.hours} hours (${category.percentage}%)`;
-          }
-        }
-      },
-      states: {
-        hover: {
-          filter: {
-            type: 'lighten',
-            value: 0.15
-          }
+        stroke: {
+          colors: [borderColor],
+          lineCap: "",
+          width: 1
         },
-        active: {
-          allowMultipleDataPointsSelection: false,
-          filter: {
-            type: 'darken',
-            value: 0.7
-          }
-        }
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 280,
-            height: 280
+        plotOptions: {
+          pie: {
+            labels: {
+              show: true,
+            },
+            size: "100%",
+            dataLabels: {
+              offset: -20
+            },
+            donut: {
+              size: '0%'
+            }
           },
-          dataLabels: {
-            style: {
-              fontSize: '10px'
+        },
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: '11px',
+            colors: ['#ffffff'], 
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: '500'
+          },
+          formatter: function(val, opts) {
+            const hours = categoryData[opts.seriesIndex].hours;
+            return hours + 'h';
+          },
+          dropShadow: {
+            enabled: false
+          }
+        },
+        legend: {
+          show: false, // We'll use custom legend
+        },
+        tooltip: {
+          enabled: true,
+          style: {
+            fontFamily: chartDefaults.fontFamily,
+          },
+          y: {
+            formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+              const category = categoryData[seriesIndex];
+              return `${category.hours} hours (${category.percentage}%)`;
             }
           }
-        }
-      }]
-    };
+        },
+        states: {
+          hover: {
+            filter: {
+              type: 'lighten',
+              value: 0.15
+            }
+          },
+          active: {
+            allowMultipleDataPointsSelection: false,
+            filter: {
+              type: 'darken',
+              value: 0.7
+            }
+          }
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 280,
+              height: 280
+            },
+            dataLabels: {
+              style: {
+                fontSize: '10px'
+              }
+            }
+          }
+        }]
+      };
 
-    const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-    chart.render();
-  } catch (error) {
-    console.error('Failed to initialize category chart:', error);
-    showChartError(chartId);
+      chart = new ApexCharts(document.getElementById(chartId), chartOptions);
+      chart.render();
+    } catch (error) {
+      console.error('Failed to initialize category chart:', error);
+      showChartError(chartId);
+    }
   }
+
+  // Initial render
+  renderChart();
+  
+  // Listen for theme changes
+  const observer = new MutationObserver(() => {
+    if (chart) {
+      chart.destroy();
+    }
+    renderChart();
+  });
+  
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+  
+  // Also listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (chart) {
+      chart.destroy();
+    }
+    renderChart();
+  });
 }
 
 function initializeDailyChart() {
