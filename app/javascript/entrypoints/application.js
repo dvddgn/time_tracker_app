@@ -279,7 +279,7 @@ function initializeCategoryChart() {
           },
           size: "100%",
           dataLabels: {
-            offset: -25
+            offset: -20
           },
           donut: {
             size: '0%'
@@ -289,9 +289,10 @@ function initializeCategoryChart() {
       dataLabels: {
         enabled: true,
         style: {
-          fontFamily: chartDefaults.fontFamily,
-          fontSize: '12px',
-          fontWeight: 600
+          fontSize: '11px',
+          colors: ['#ffffff'], 
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: '500'
         },
         formatter: function(val, opts) {
           const hours = categoryData[opts.seriesIndex].hours;
@@ -521,11 +522,12 @@ function initializeWeeklyChart() {
         formatter: function(val) {
           return val > 0 ? val + 'h' : '';
         },
-        offsetY: -20,
+        offsetY: 15,
         style: {
-          fontSize: '12px',
-          colors: ["#6B7280"],
-          fontFamily: chartDefaults.fontFamily
+          fontSize: '11px',
+          colors: ['#ffffff'], 
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: '500'
         }
       },
       tooltip: {
@@ -659,16 +661,16 @@ function initializeTopCategoriesChart() {
       dataLabels: {
         enabled: true,
         textAnchor: 'start',
+        offsetX: -25,
         style: {
-          colors: ['#fff'],
-          fontSize: '12px',
-          fontFamily: chartDefaults.fontFamily,
-          fontWeight: 600
+          colors: ['#ffffff'],
+          fontSize: '11px',
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: '500'
         },
-        formatter: function(val, opt) {
-          return val > 0 ? val + "h" : '';
-        },
-        offsetX: 0,
+        formatter: function(val) {
+          return val > 0 ? val + 'h' : '';
+        }
       },
       stroke: {
         width: 1,
