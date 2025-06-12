@@ -527,7 +527,7 @@ function initializeWeeklyChart() {
       series: [{
         name: "Hours",
         data: weeklyData,
-        color: chartDefaults.colors[2]
+        color: chartDefaults.colors[4]
       }],
       chart: {
         type: "bar",
