@@ -206,7 +206,7 @@ function initializeCategoryChart() {
     // Detect dark mode
     const isDarkMode = document.documentElement.classList.contains('dark') || 
                       window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const strokeColor = isDarkMode ? '#374151' : '#ffffff';
+    const strokeColor = isDarkMode ? '#6B7280' : '#ffffff';
     
     const chartOptions = {
       series: categoryData.map(cat => cat.hours),
@@ -272,61 +272,92 @@ function initializeCategoryChart() {
 function initializeDailyChart() {
   const chartId = 'daily-line-chart';
   const dailyData = window.dashboardData?.dailyData || [];
+  let chart; // Store chart instance
   
   if (dailyData.length === 0 || dailyData.every(day => day.hours === 0)) {
     showEmptyChart(chartId, 'No daily activity data');
     return;
   }
   
-  const chartOptions = {
-    series: [{
-      name: "Hours Worked",
-      data: dailyData.map(day => ({ x: day.day, y: day.hours })),
-      color: chartDefaults.colors[0]
-    }],
-    chart: {
-      height: 320,
-      type: "line",
-      fontFamily: chartDefaults.fontFamily,
-      animations: chartDefaults.animations,
-      toolbar: chartDefaults.toolbar
-    },
-    stroke: { width: 4, curve: 'smooth' },
-    xaxis: {
-      categories: dailyData.map(day => day.day.substring(0, 3))
-    },
-    yaxis: {
-      labels: {
-        formatter: value => value + 'h'
+  function renderChart() {
+    // Detect dark mode
+    const isDarkMode = document.documentElement.classList.contains('dark') || 
+                      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const strokeColor = isDarkMode ? '#6B7280' : '#ffffff';
+    
+    const chartOptions = {
+      series: [{
+        name: "Hours Worked",
+        data: dailyData.map(day => ({ x: day.day, y: day.hours })),
+        color: chartDefaults.colors[0]
+      }],
+      chart: {
+        height: 320,
+        type: "line",
+        fontFamily: chartDefaults.fontFamily,
+        animations: chartDefaults.animations,
+        toolbar: chartDefaults.toolbar
       },
-      min: 0
-    },
-    grid: chartDefaults.grid,
-    dataLabels: { enabled: false },
-    markers: {
-      size: 6,
-      colors: [chartDefaults.colors[0]],
-      strokeColors: "#ffffff",
-      strokeWidth: 3,
-      hover: {
-        size: 8
-      }
-    },
-    tooltip: {
-      x: {
-        formatter: (value, { dataPointIndex }) => dailyData[dataPointIndex].day
+      stroke: { width: 4, curve: 'smooth' },
+      xaxis: {
+        categories: dailyData.map(day => day.day.substring(0, 3))
       },
-      y: {
-        formatter: (value, { dataPointIndex }) => {
-          const dayData = dailyData[dataPointIndex];
-          return `${dayData.hours} hours worked<br/>${dayData.entries} time entries`;
+      yaxis: {
+        labels: {
+          formatter: value => value + 'h'
+        },
+        min: 0
+      },
+      grid: chartDefaults.grid,
+      dataLabels: { enabled: false },
+      markers: {
+        size: 6,
+        colors: [chartDefaults.colors[0]],
+        strokeColors: strokeColor,
+        strokeWidth: 3,
+        hover: {
+          size: 8
+        }
+      },
+      tooltip: {
+        x: {
+          formatter: (value, { dataPointIndex }) => dailyData[dataPointIndex].day
+        },
+        y: {
+          formatter: (value, { dataPointIndex }) => {
+            const dayData = dailyData[dataPointIndex];
+            return `${dayData.hours} hours worked<br/>${dayData.entries} time entries`;
+          }
         }
       }
-    }
-  };
+    };
 
-  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-  chart.render();
+    // Destroy existing chart if it exists
+    if (chart) {
+      chart.destroy();
+    }
+    
+    chart = new ApexCharts(document.getElementById(chartId), chartOptions);
+    chart.render();
+  }
+
+  // Initial render
+  renderChart();
+  
+  // Listen for manual theme changes (class changes on html element)
+  const observer = new MutationObserver(() => {
+    renderChart();
+  });
+  
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    renderChart();
+  });
 }
 
 function initializeWeeklyChart() {
