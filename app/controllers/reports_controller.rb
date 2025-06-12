@@ -81,18 +81,25 @@ class ReportsController < ApplicationController
   end
 
   def top_categories_data
-    # Use already computed category data
-    @category_data ||= category_breakdown
-    @category_data
-      .first(5)
-      .map do |cat|
-        {
-          category: cat[:name],
-          hours: cat[:hours],
-          formatted: "#{cat[:hours]}h",
-          percentage: cat[:percentage]
-        }
-      end
+    # Get all-time top categories (not filtered by date range)
+    results = Current.user.time_logs
+      .completed
+      .joins(:category)
+      .group('categories.name')
+      .select('categories.name, SUM(ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)) as total_minutes')
+      .order('total_minutes DESC')
+      .limit(5)
+    
+    total_minutes = Current.user.time_logs.completed.sum('ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)')
+    
+    results.map do |result|
+      {
+        category: result.name,
+        hours: (result.total_minutes / 60.0).round(1),
+        formatted: "#{(result.total_minutes / 60.0).round(1)}h",
+        percentage: calculate_percentage(result.total_minutes, total_minutes)
+      }
+    end
   end
 
   def calculate_percentage(minutes, total)
