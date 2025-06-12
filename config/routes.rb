@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "reports/index"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -13,6 +14,9 @@ Rails.application.routes.draw do
   # Time logs resource - excluding show action
   resources :time_logs, except: [ :show ]
 
+  # Dashboard routes
+  get '/dashboard', to: "reports#index"
+
   # Pages routes
   get "pages/home"
   get "pages/about"
@@ -26,5 +30,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "pages#home"
+  root "reports#index"
 end
