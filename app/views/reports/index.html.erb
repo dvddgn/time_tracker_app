@@ -151,7 +151,8 @@
         </div>
         <div class="flex items-center">
           <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
-            <%= @daily_data.sum { |day| day[:hours] } %> hours this week
+            <% avg_hours = (@daily_data.sum { |day| day[:hours] } / @daily_data.length.to_f).round(1) %>
+            <%= avg_hours %>h daily average
           </span>
         </div>
       </div>
@@ -159,29 +160,24 @@
       <!-- Line Chart Container -->
       <div id="daily-line-chart" class="py-6"></div>
       
-      <!-- Daily Summary -->
+      <!-- Weekly Insights -->
       <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
         <div class="h-32 flex items-center">
-          <div class="grid grid-cols-3 gap-4 text-center w-full">
-          <div>
-            <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Average Daily</dt>
-            <dd class="leading-none text-xl font-bold text-blue-600 dark:text-blue-400">
-              <%= (@daily_data.sum { |day| day[:hours] } / @daily_data.length.to_f).round(1) %>h
-            </dd>
-          </div>
-          <div>
-            <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Most Productive</dt>
-            <dd class="leading-none text-xl font-bold text-green-600 dark:text-green-400">
-              <% best_day = @daily_data.max_by { |day| day[:hours] } %>
-              <%= best_day[:day] %>
-            </dd>
-          </div>
-          <div>
-            <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Total Entries</dt>
-            <dd class="leading-none text-xl font-bold text-gray-900 dark:text-white">
-              <%= @daily_data.sum { |day| day[:entries] } %>
-            </dd>
-          </div>
+          <div class="grid grid-cols-2 gap-4 text-center w-full">
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Highest Day</dt>
+              <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
+                <% highest_day = @daily_data.max_by { |day| day[:hours] } %>
+                <%= highest_day[:day] %> - <%= highest_day[:hours] %>h
+              </dd>
+            </div>
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Lowest Day</dt>
+              <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
+                <% lowest_day = @daily_data.min_by { |day| day[:hours] } %>
+                <%= lowest_day[:day] %> - <%= lowest_day[:hours] %>h
+              </dd>
+            </div>
           </div>
         </div>
       </div>
@@ -210,17 +206,17 @@
         <div class="h-32 flex items-center">
           <div class="grid grid-cols-2 gap-4 text-center w-full">
             <div>
-              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Peak Day</dt>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Highest Day</dt>
               <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
-                <% peak_day = @daily_data.max_by { |day| day[:hours] } %>
-                <%= peak_day[:day] %> - <%= peak_day[:hours] %>h
+                <% highest_day = @daily_data.max_by { |day| day[:hours] } %>
+                <%= highest_day[:day] %> - <%= highest_day[:hours] %>h
               </dd>
             </div>
             <div>
-              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Light Day</dt>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Lowest Day</dt>
               <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
-                <% light_day = @daily_data.min_by { |day| day[:hours] } %>
-                <%= light_day[:day] %> - <%= light_day[:hours] %>h
+                <% lowest_day = @daily_data.min_by { |day| day[:hours] } %>
+                <%= lowest_day[:day] %> - <%= lowest_day[:hours] %>h
               </dd>
             </div>
           </div>
