@@ -191,7 +191,7 @@
           <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours spent per category</p>
         </div>
         <div class="flex items-center">
-          <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+          <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-purple-900 dark:text-purple-300">
             <%= @category_data.length %> categories tracked
           </span>
         </div>
@@ -205,10 +205,10 @@
         <div class="h-32 flex items-center">
           <div class="grid grid-cols-2 gap-4 text-center w-full">
             <div>
-              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Top Category</dt>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Most Used</dt>
               <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
-                <% top_category = @category_data.max_by { |cat| cat[:hours] } %>
-                <%= top_category[:name] %> - <%= top_category[:hours] %>h
+                <% most_category = @category_data.max_by { |cat| cat[:hours] } %>
+                <%= most_category[:name] %> - <%= most_category[:hours] %>h
               </dd>
             </div>
             <div>

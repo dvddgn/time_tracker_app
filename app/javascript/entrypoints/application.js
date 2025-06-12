@@ -552,7 +552,7 @@ function initializeWeeklyChart() {
         formatter: function(val) {
           return val > 0 ? val + 'h' : '';
         },
-        offsetY: 15,
+        offsetY: 5,
         style: {
           fontSize: '11px',
           colors: ['#ffffff'], 
