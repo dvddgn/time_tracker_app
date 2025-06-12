@@ -260,7 +260,7 @@ function initializeCategoryChart() {
       labels: categoryData.map(cat => cat.name),
       colors: chartDefaults.colors,
       chart: {
-        height: 320,
+        height: 340,
         width: "100%",
         type: "pie",
         fontFamily: chartDefaults.fontFamily,
