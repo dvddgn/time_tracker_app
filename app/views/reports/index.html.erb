@@ -128,8 +128,9 @@
       <div id="category-pie-chart" class="py-6"></div>
       
       <!-- Category Legend -->
-      <div class="grid grid-cols-1 border-gray-200 border-t dark:border-gray-700 pt-4">
-        <div class="space-y-2 max-h-48 overflow-y-auto">
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 overflow-y-auto">
+          <div class="space-y-2">
           <% @category_data.each_with_index do |category, index| %>
             <div class="flex items-center justify-between">
               <div class="flex items-center">
@@ -141,12 +142,13 @@
               </span>
             </div>
           <% end %>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Daily Progress Line Chart -->
-    <div class="bg-white rounded-lg  dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Daily Progress</h5>
@@ -163,8 +165,9 @@
       <div id="daily-line-chart" class="py-6"></div>
       
       <!-- Daily Summary -->
-      <div class="grid grid-cols-1 border-gray-200 border-t dark:border-gray-700 pt-4">
-        <div class="grid grid-cols-3 gap-4 text-center">
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 flex items-center">
+          <div class="grid grid-cols-3 gap-4 text-center w-full">
           <div>
             <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Average Daily</dt>
             <dd class="leading-none text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -184,12 +187,13 @@
               <%= @daily_data.sum { |day| day[:entries] } %>
             </dd>
           </div>
+          </div>
         </div>
       </div>
     </div>
     
     <!-- Weekly Hours Column Chart -->
-    <div class="bg-white rounded-lg  dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Weekly Overview</h5>
@@ -207,28 +211,30 @@
       <div id="weekly-column-chart" class="py-6"></div>
       
       <!-- Weekly Insights -->
-      <div class="grid grid-cols-1 border-gray-200 border-t dark:border-gray-700 pt-4">
-        <div class="grid grid-cols-2 gap-4">
-          <div class="text-center">
-            <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Peak Day</dt>
-            <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
-              <% peak_day = @daily_data.max_by { |day| day[:hours] } %>
-              <%= peak_day[:day] %> - <%= peak_day[:hours] %>h
-            </dd>
-          </div>
-          <div class="text-center">
-            <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Light Day</dt>
-            <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
-              <% light_day = @daily_data.min_by { |day| day[:hours] } %>
-              <%= light_day[:day] %> - <%= light_day[:hours] %>h
-            </dd>
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 flex items-center">
+          <div class="grid grid-cols-2 gap-4 text-center w-full">
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Peak Day</dt>
+              <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
+                <% peak_day = @daily_data.max_by { |day| day[:hours] } %>
+                <%= peak_day[:day] %> - <%= peak_day[:hours] %>h
+              </dd>
+            </div>
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Light Day</dt>
+              <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
+                <% light_day = @daily_data.min_by { |day| day[:hours] } %>
+                <%= light_day[:day] %> - <%= light_day[:hours] %>h
+              </dd>
+            </div>
           </div>
         </div>
       </div>
     </div>
     
     <!-- Top Categories Horizontal Bar Chart -->
-    <div class="bg-white rounded-lg  dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex justify-between items-start mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white mb-1">Top Work Categories</h5>
@@ -245,24 +251,26 @@
       <div id="top-categories-chart" class="py-6"></div>
       
       <!-- Category Rankings -->
-      <div class="grid grid-cols-1 border-gray-200 border-t dark:border-gray-700 pt-4">
-        <div class="space-y-3">
-          <% @top_categories.each_with_index do |category, index| %>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center">
-                <div class="flex items-center justify-center w-6 h-6 bg-gray-100 dark:bg-gray-700 rounded-full mr-3">
-                  <span class="text-xs font-medium text-gray-600 dark:text-gray-300"><%= index + 1 %></span>
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 overflow-y-auto">
+          <div class="space-y-2">
+            <% @top_categories.each_with_index do |category, index| %>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="flex items-center justify-center w-6 h-6 bg-gray-100 dark:bg-gray-700 rounded-full mr-3">
+                    <span class="text-xs font-medium text-gray-600 dark:text-gray-300"><%= index + 1 %></span>
+                  </div>
+                  <span class="text-sm font-medium text-gray-900 dark:text-white"><%= category[:category] %></span>
                 </div>
-                <span class="text-sm font-medium text-gray-900 dark:text-white"><%= category[:category] %></span>
-              </div>
-              <div class="flex items-center space-x-2">
-                <span class="text-sm font-bold text-blue-600 dark:text-blue-400"><%= category[:formatted] %></span>
-                <div class="w-16 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
-                  <div class="bg-blue-600 h-2 rounded-full" style="width: <%= (category[:hours] / @top_categories.first[:hours] * 100).round %>%"></div>
+                <div class="flex items-center space-x-2">
+                  <span class="text-sm font-bold text-blue-600 dark:text-blue-400"><%= category[:formatted] %></span>
+                  <div class="w-16 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: <%= (category[:hours] / @top_categories.first[:hours] * 100).round %>%"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
