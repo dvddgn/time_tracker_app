@@ -268,9 +268,9 @@ function initializeCategoryChart() {
         toolbar: chartDefaults.toolbar
       },
       stroke: {
-        colors: ["white"],
+        colors: ["transparent"],
         lineCap: "",
-        width: 2
+        width: 0
       },
       plotOptions: {
         pie: {
@@ -553,7 +553,7 @@ function initializeWeeklyChart() {
         },
       },
       stroke: {
-        show: true,
+        show: false,
         width: 0,
         colors: ["transparent"],
       },
@@ -673,8 +673,8 @@ function initializeTopCategoriesChart() {
         }
       },
       stroke: {
-        width: 1,
-        colors: ["#fff"]
+        width: 0,
+        colors: ["transparent"]
       },
       xaxis: {
         categories: topCategories.map(cat => cat.category),
