@@ -3,7 +3,7 @@
 <div class="p-4 mt-14 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg dark:border-gray-700">
   <!-- Header Section -->
   <div class="mb-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
       <div>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Time Tracking Dashboard</h1>
         <p class="text-gray-600 dark:text-gray-400">
@@ -12,22 +12,26 @@
       </div>
       
       <!-- Date Range Filter -->
-      <div class="mt-4 sm:mt-0">
-        <div class="flex items-center space-x-2">
-          <div class="relative">
-            <input type="date" id="start-date" 
-                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                   value="<%= params[:start_date] || Date.current.beginning_of_week.strftime('%Y-%m-%d') %>">
+      <div class="mt-4">
+        <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+          <!-- Date Range Group -->
+          <div class="flex items-center space-x-2">
+            <div class="relative flex-1 min-w-0">
+              <input type="date" id="start-date" 
+                     class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                     value="<%= params[:start_date] || Date.current.beginning_of_week.strftime('%Y-%m-%d') %>">
+            </div>
+            <span class="text-gray-500 dark:text-gray-400 text-sm flex-shrink-0">to</span>
+            <div class="relative flex-1 min-w-0">
+              <input type="date" id="end-date" 
+                     class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                     value="<%= params[:end_date] || (Date.current.beginning_of_week + 4.days).strftime('%Y-%m-%d') %>">
+            </div>
           </div>
-          <span class="text-gray-500 dark:text-gray-400">to</span>
-          <div class="relative">
-            <input type="date" id="end-date" 
-                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                   value="<%= params[:end_date] || (Date.current.beginning_of_week + 4.days).strftime('%Y-%m-%d') %>">
-          </div>
+          <!-- Apply Button -->
           <button type="button" id="apply-filter" 
-                  class="px-3 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Apply
+                  class="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Apply Filter
           </button>
         </div>
       </div>
