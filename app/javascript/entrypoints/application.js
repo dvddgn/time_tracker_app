@@ -67,6 +67,46 @@ function initializeMobileSidebar() {
 // DATEPICKER FUNCTIONALITY
 // ====================================================================
 
+function initializeDateFilterFunctionality() {
+  const applyButton = document.getElementById('apply-filter');
+  const startDateInput = document.getElementById('start-datepicker');
+  const endDateInput = document.getElementById('end-datepicker');
+
+  if (!applyButton || !startDateInput || !endDateInput) {
+    return;
+  }
+
+  applyButton.addEventListener('click', function() {
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value;
+    
+    if (!startDate || !endDate) {
+      alert('Please select both start and end dates');
+      return;
+    }
+    
+    if (new Date(startDate) > new Date(endDate)) {
+      alert('Start date must be before end date');
+      return;
+    }
+    
+    // Add loading state to button
+    applyButton.innerHTML = `
+      <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white inline-block mr-2"></div>
+      Applying...
+    `;
+    applyButton.disabled = true;
+    
+    // Reload page with date parameters
+    const url = new URL(window.location.href);
+    url.searchParams.set('start_date', startDate);
+    url.searchParams.set('end_date', endDate);
+    window.location.href = url.toString();
+  });
+  
+  console.log('Date filter functionality initialized');
+}
+
 function initializeDatePickers() {
   const startDateEl = document.getElementById('start-datepicker');
   const endDateEl = document.getElementById('end-datepicker');
@@ -581,6 +621,7 @@ function initializeApplication() {
   
   // Datepicker Initialization
   initializeDatePickers();
+  initializeDateFilterFunctionality();
   
   // Data Tables Initialization
   initializeDataTables();
