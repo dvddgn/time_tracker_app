@@ -118,7 +118,7 @@
         </div>
         <div class="flex items-center flex-shrink-0">
           <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-blue-900 dark:text-blue-300">
-            <%= @category_data.sum { |cat| cat[:hours] } %>h total
+            <%= @category_data.sum { |cat| cat[:hours] } %> total hours
           </span>
         </div>
       </div>
@@ -156,7 +156,7 @@
         <div class="flex items-center flex-shrink-0">
           <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
             <% avg_hours = (@daily_data.sum { |day| day[:hours] } / @daily_data.length.to_f).round(1) %>
-            <%= avg_hours %>h avg
+            <%= avg_hours %> average daily hours
           </span>
         </div>
       </div>
@@ -204,7 +204,7 @@
         </div>
         <div class="flex items-center flex-shrink-0">
           <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-purple-900 dark:text-purple-300">
-            <%= @category_data.length %> tracked
+            <%= @category_data.length %> categories tracked
           </span>
         </div>
       </div>
