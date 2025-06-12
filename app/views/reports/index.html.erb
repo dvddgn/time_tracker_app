@@ -13,6 +13,28 @@
       
       <!-- Date Range Filter -->
       <div class="mt-4">
+        <!-- Quick Filter Buttons -->
+        <div class="mb-3">
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-period="this-week" 
+                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
+              This Week
+            </button>
+            <button type="button" data-period="last-week" 
+                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
+              Last Week
+            </button>
+            <button type="button" data-period="this-month" 
+                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
+              This Month
+            </button>
+            <button type="button" data-period="last-month" 
+                    class="quick-filter-btn px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">
+              Last Month
+            </button>
+          </div>
+        </div>
+        
         <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
           <!-- Date Range Group -->
           <div class="flex items-center space-x-2">
@@ -309,4 +331,144 @@
     categoryOverviewData: <%= raw @category_overview_data.to_json %>,
     topCategories: <%= raw @top_categories.to_json %>
   };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Quick filter functionality
+    const quickFilterButtons = document.querySelectorAll('.quick-filter-btn');
+    const startDatePicker = document.getElementById('start-datepicker');
+    const endDatePicker = document.getElementById('end-datepicker');
+    const applyFilterButton = document.getElementById('apply-filter');
+
+    // Get user's timezone information
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('User timezone:', userTimezone);
+
+    // Function to format date as YYYY-MM-DD in local timezone
+    function formatDateLocal(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // Function to get current date/time in user's timezone
+    function getTodayInTimezone() {
+      const now = new Date();
+      // Create a new date object that represents "today" in the user's local timezone
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
+    // Function to get date ranges
+    function getDateRange(period) {
+      const today = getTodayInTimezone();
+      let startDate, endDate;
+
+      console.log('Calculating date range for:', period, 'Today is:', formatDateLocal(today));
+
+      switch (period) {
+        case 'this-week':
+          // Get start of current week (Monday)
+          const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+          const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1; // If Sunday, go back 6 days
+          startDate = new Date(today);
+          startDate.setDate(today.getDate() - daysFromMonday);
+          
+          // Get end of current week (Friday)
+          endDate = new Date(startDate);
+          endDate.setDate(startDate.getDate() + 4);
+          break;
+          
+        case 'last-week':
+          // Get start of last week (Monday)
+          const todayDay = today.getDay();
+          const daysToLastMonday = todayDay === 0 ? 13 : todayDay + 6; // If Sunday, go back 13 days, else current day + 6
+          startDate = new Date(today);
+          startDate.setDate(today.getDate() - daysToLastMonday);
+          
+          // Get end of last week (Friday)
+          endDate = new Date(startDate);
+          endDate.setDate(startDate.getDate() + 4);
+          break;
+          
+        case 'this-month':
+          // First day of current month
+          startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+          // Last day of current month
+          endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+          
+        case 'last-month':
+          // First day of last month
+          startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          // Last day of last month
+          endDate = new Date(today.getFullYear(), today.getMonth(), 0);
+          break;
+          
+        default:
+          return { start: null, end: null };
+      }
+
+      const result = {
+        start: formatDateLocal(startDate),
+        end: formatDateLocal(endDate)
+      };
+
+      console.log('Date range result:', result);
+      return result;
+    }
+
+    // Function to update active button state
+    function updateActiveButton(activeButton) {
+      quickFilterButtons.forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+        btn.classList.add('dark:bg-gray-800', 'dark:text-gray-300', 'dark:border-gray-600');
+      });
+      
+      if (activeButton) {
+        activeButton.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+        activeButton.classList.remove('dark:bg-gray-800', 'dark:text-gray-300', 'dark:border-gray-600');
+        activeButton.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+      }
+    }
+
+    // Quick filter button click handlers
+    quickFilterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const period = this.dataset.period;
+        const dateRange = getDateRange(period);
+        
+        if (dateRange.start && dateRange.end) {
+          startDatePicker.value = dateRange.start;
+          endDatePicker.value = dateRange.end;
+          updateActiveButton(this);
+          
+          // Automatically apply the filter
+          applyFilterButton.click();
+        }
+      });
+    });
+
+    // Reset active button when manual date changes occur
+    [startDatePicker, endDatePicker].forEach(input => {
+      input.addEventListener('change', function() {
+        updateActiveButton(null);
+      });
+    });
+
+    // Apply filter functionality (if not already implemented)
+    if (applyFilterButton) {
+      applyFilterButton.addEventListener('click', function() {
+        const startDate = startDatePicker.value;
+        const endDate = endDatePicker.value;
+        
+        if (startDate && endDate) {
+          const url = new URL(window.location);
+          url.searchParams.set('start_date', startDate);
+          url.searchParams.set('end_date', endDate);
+          window.location.href = url.toString();
+        }
+      });
+    }
+  });
 </script>
