@@ -167,15 +167,23 @@
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Highest Day</dt>
               <dd class="leading-none text-lg font-bold text-green-600 dark:text-green-400">
-                <% highest_day = @daily_data.max_by { |day| day[:hours] } %>
-                <%= highest_day[:day] %> - <%= highest_day[:hours] %>h
+                <% highest_day = @daily_data&.max_by { |day| day[:hours] } %>
+                <% if highest_day && highest_day[:hours] > 0 %>
+                  <%= highest_day[:day] %> - <%= highest_day[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
               </dd>
             </div>
             <div>
               <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Lowest Day</dt>
               <dd class="leading-none text-lg font-bold text-blue-600 dark:text-blue-400">
-                <% lowest_day = @daily_data.min_by { |day| day[:hours] } %>
-                <%= lowest_day[:day] %> - <%= lowest_day[:hours] %>h
+                <% lowest_day = @daily_data&.min_by { |day| day[:hours] } %>
+                <% if lowest_day && lowest_day[:hours] > 0 %>
+                  <%= lowest_day[:day] %> - <%= lowest_day[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
               </dd>
             </div>
           </div>
