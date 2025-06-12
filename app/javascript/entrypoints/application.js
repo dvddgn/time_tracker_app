@@ -146,43 +146,35 @@ function initializeDataTables() {
 // CHARTS FUNCTIONALITY
 // ====================================================================
 
-function showChartLoading(chartId) {
-  const container = document.getElementById(chartId);
-  if (container) {
-    container.innerHTML = `
-      <div class="chart-loading flex items-center justify-center h-64">
-        <div class="text-center">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Loading chart...</p>
-        </div>
-      </div>
-    `;
+// Shared chart configuration
+const chartDefaults = {
+  fontFamily: "Inter, sans-serif",
+  colors: ['#1C64F2', '#16BDCA', '#9061F9', '#F05252', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'],
+  animations: {
+    enabled: true,
+    easing: 'easeinout',
+    speed: 800
+  },
+  grid: {
+    show: true,
+    strokeDashArray: 4,
+    borderColor: '#f3f4f6'
+  },
+  toolbar: {
+    show: true,
+    tools: {
+      download: true,
+      selection: false,
+      zoom: false,
+      zoomin: false,
+      zoomout: false,
+      pan: false,
+      reset: false
+    }
   }
-}
+};
 
-function clearChartContainer(chartId) {
-  const container = document.getElementById(chartId);
-  if (container) {
-    container.innerHTML = '';
-  }
-}
-
-function showChartError(chartId, message = 'Unable to load chart') {
-  const container = document.getElementById(chartId);
-  if (container) {
-    container.innerHTML = `
-      <div class="flex items-center justify-center h-64">
-        <div class="text-center">
-          <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <p class="text-sm text-gray-500 dark:text-gray-400">${message}</p>
-        </div>
-      </div>
-    `;
-  }
-}
-
+// Empty state helper
 function showEmptyChart(chartId, message = 'No data available') {
   const container = document.getElementById(chartId);
   if (container) {
@@ -200,608 +192,231 @@ function showEmptyChart(chartId, message = 'No data available') {
   }
 }
 
-// Enhanced chart configuration with consistent theming
-const chartDefaults = {
-  fontFamily: "Inter, sans-serif",
-  colors: ['#1C64F2', '#16BDCA', '#9061F9', '#F05252', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'],
-  animations: {
-    enabled: true,
-    easing: 'easeinout',
-    speed: 800,
-    animateGradually: {
-      enabled: true,
-      delay: 150
-    },
-    dynamicAnimation: {
-      enabled: true,
-      speed: 350
-    }
-  },
-  grid: {
-    show: true,
-    strokeDashArray: 4,
-    borderColor: '#f3f4f6',
-    row: {
-      colors: ['transparent'],
-      opacity: 0.5
-    }
-  },
-  toolbar: {
-    show: true,
-    tools: {
-      download: true,
-      selection: false,
-      zoom: false,
-      zoomin: false,
-      zoomout: false,
-      pan: false,
-      reset: false
-    }
-  }
-};
-
 function initializeCategoryChart() {
   const chartId = 'category-pie-chart';
   const categoryData = window.dashboardData?.categoryData || [];
-  let chart; // Store chart instance for updates
   
   if (categoryData.length === 0) {
     showEmptyChart(chartId, 'No category data available');
     return;
   }
   
-  function renderChart() {
-    showChartLoading(chartId);
-    clearChartContainer(chartId);
-    
-    try {
-      // Detect dark mode
-      const isDarkMode = document.documentElement.classList.contains('dark') || 
-                        window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const borderColor = isDarkMode ? "#374151" : "#ffffff"; // Dark gray for dark mode, white for light mode
-      
-      const chartOptions = {
-        series: categoryData.map(cat => cat.hours),
-        labels: categoryData.map(cat => cat.name),
-        colors: chartDefaults.colors,
-        chart: {
-          height: 340,
-          width: "100%",
-          type: "pie",
-          fontFamily: chartDefaults.fontFamily,
-          animations: chartDefaults.animations,
-          toolbar: chartDefaults.toolbar
-        },
-        stroke: {
-          colors: [borderColor],
-          lineCap: "",
-          width: 1
-        },
-        plotOptions: {
-          pie: {
-            labels: {
-              show: true,
-            },
-            size: "100%",
-            dataLabels: {
-              offset: -20
-            },
-            donut: {
-              size: '0%'
-            }
-          },
-        },
-        dataLabels: {
-          enabled: true,
-          style: {
-            fontSize: '11px',
-            colors: ['#ffffff'], 
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: '500'
-          },
-          formatter: function(val, opts) {
-            const category = categoryData[opts.seriesIndex];
-            return category.percentage + '%';
-          },
-          dropShadow: {
-            enabled: false
-          }
-        },
-        legend: {
-          show: false, // We'll use custom legend
-        },
-        tooltip: {
-          enabled: true,
-          style: {
-            fontFamily: chartDefaults.fontFamily,
-          },
-          y: {
-            formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-              const category = categoryData[seriesIndex];
-              return `${category.hours} hours (${category.percentage}%)`;
-            }
-          }
-        },
-        states: {
-          hover: {
-            filter: {
-              type: 'lighten',
-              value: 0.15
-            }
-          },
-          active: {
-            allowMultipleDataPointsSelection: false,
-            filter: {
-              type: 'darken',
-              value: 0.7
-            }
-          }
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 280,
-              height: 280
-            },
-            dataLabels: {
-              style: {
-                fontSize: '10px'
-              }
-            }
-          }
-        }]
-      };
+  const chartOptions = {
+    series: categoryData.map(cat => cat.hours),
+    labels: categoryData.map(cat => cat.name),
+    colors: chartDefaults.colors,
+    chart: {
+      height: 340,
+      type: "pie",
+      fontFamily: chartDefaults.fontFamily,
+      animations: chartDefaults.animations,
+      toolbar: chartDefaults.toolbar
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function(val, opts) {
+        return categoryData[opts.seriesIndex].percentage + '%';
+      }
+    },
+    legend: { show: false },
+    tooltip: {
+      y: {
+        formatter: function(value, { seriesIndex }) {
+          const category = categoryData[seriesIndex];
+          return `${category.hours} hours (${category.percentage}%)`;
+        }
+      }
+    }
+  };
 
-      chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-      chart.render();
-    } catch (error) {
-      console.error('Failed to initialize category chart:', error);
-      showChartError(chartId);
-    }
-  }
-
-  // Initial render
-  renderChart();
-  
-  // Listen for theme changes
-  const observer = new MutationObserver(() => {
-    if (chart) {
-      chart.destroy();
-    }
-    renderChart();
-  });
-  
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-  
-  // Also listen for system theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (chart) {
-      chart.destroy();
-    }
-    renderChart();
-  });
+  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
+  chart.render();
 }
 
 function initializeDailyChart() {
   const chartId = 'daily-line-chart';
   const dailyData = window.dashboardData?.dailyData || [];
   
-  showChartLoading(chartId);
-  
   if (dailyData.length === 0 || dailyData.every(day => day.hours === 0)) {
     showEmptyChart(chartId, 'No daily activity data');
     return;
   }
   
-  // Clear the loading state before rendering
-  clearChartContainer(chartId);
-  
-  try {
-    const chartOptions = {
-      series: [{
-        name: "Hours Worked",
-        data: dailyData.map(day => ({
-          x: day.day,
-          y: day.hours
-        })),
-        color: chartDefaults.colors[0]
-      }],
-      chart: {
-        height: 320,
-        width: "100%",
-        type: "line",
-        fontFamily: chartDefaults.fontFamily,
-        animations: chartDefaults.animations,
-        toolbar: chartDefaults.toolbar,
-        zoom: {
-          enabled: false
+  const chartOptions = {
+    series: [{
+      name: "Hours Worked",
+      data: dailyData.map(day => ({ x: day.day, y: day.hours })),
+      color: chartDefaults.colors[0]
+    }],
+    chart: {
+      height: 320,
+      type: "line",
+      fontFamily: chartDefaults.fontFamily,
+      animations: chartDefaults.animations,
+      toolbar: chartDefaults.toolbar
+    },
+    stroke: { width: 4, curve: 'smooth' },
+    xaxis: {
+      categories: dailyData.map(day => day.day.substring(0, 3))
+    },
+    yaxis: {
+      labels: {
+        formatter: value => value + 'h'
+      },
+      min: 0
+    },
+    grid: chartDefaults.grid,
+    dataLabels: { enabled: false },
+    markers: {
+      size: 6,
+      colors: [chartDefaults.colors[0]],
+      strokeColors: "#ffffff",
+      strokeWidth: 3,
+      hover: {
+        size: 8
+      }
+    },
+    tooltip: {
+      x: {
+        formatter: (value, { dataPointIndex }) => dailyData[dataPointIndex].day
+      },
+      y: {
+        formatter: (value, { dataPointIndex }) => {
+          const dayData = dailyData[dataPointIndex];
+          return `${dayData.hours} hours worked<br/>${dayData.entries} time entries`;
         }
-      },
-      stroke: {
-        width: 4,
-        curve: 'smooth',
-      },
-      xaxis: {
-        categories: dailyData.map(day => day.day.substring(0, 3)),
-        labels: {
-          style: {
-            fontFamily: chartDefaults.fontFamily,
-            fontSize: '12px',
-            colors: '#6B7280'
-          }
-        },
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-      },
-      yaxis: {
-        labels: {
-          style: {
-            fontFamily: chartDefaults.fontFamily,
-            fontSize: '12px',
-            colors: '#6B7280'
-          },
-          formatter: function(value) {
-            return value + 'h';
-          }
-        },
-        min: 0
-      },
-      grid: chartDefaults.grid,
-      fill: {
-        opacity: 1,
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      tooltip: {
-        style: {
-          fontFamily: chartDefaults.fontFamily,
-        },
-        x: {
-          formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-            const dayData = dailyData[dataPointIndex];
-            return dayData.day;
-          }
-        },
-        y: {
-          formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-            const dayData = dailyData[dataPointIndex];
-            return `${dayData.hours} hours worked<br/>${dayData.entries} time entries`;
-          }
-        }
-      },
-      markers: {
-        size: 6,
-        colors: [chartDefaults.colors[0]],
-        strokeColors: "#ffffff",
-        strokeWidth: 3,
-        hover: {
-          size: 8,
-        }
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            height: 250
-          },
-          markers: {
-            size: 4
-          }
-        }
-      }]
-    };
+      }
+    }
+  };
 
-    const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-    chart.render();
-  } catch (error) {
-    console.error('Failed to initialize daily chart:', error);
-    showChartError(chartId);
-  }
+  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
+  chart.render();
 }
 
 function initializeWeeklyChart() {
   const chartId = 'weekly-column-chart';
   const weeklyData = window.dashboardData?.weeklyData || [];
   
-  showChartLoading(chartId);
-  
   if (weeklyData.length === 0 || weeklyData.every(day => day.y === 0)) {
     showEmptyChart(chartId, 'No weekly activity data');
     return;
   }
   
-  // Clear the loading state before rendering
-  clearChartContainer(chartId);
-  
-  try {
-    const chartOptions = {
-      series: [{
-        name: "Hours",
-        data: weeklyData,
-        color: chartDefaults.colors[4]
-      }],
-      chart: {
-        type: "bar",
-        height: 320,
-        fontFamily: chartDefaults.fontFamily,
-        animations: chartDefaults.animations,
-        toolbar: chartDefaults.toolbar,
+  const chartOptions = {
+    series: [{
+      name: "Hours",
+      data: weeklyData,
+      color: chartDefaults.colors[4]
+    }],
+    chart: {
+      type: "bar",
+      height: 320,
+      fontFamily: chartDefaults.fontFamily,
+      animations: chartDefaults.animations,
+      toolbar: chartDefaults.toolbar
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "60%",
+        borderRadius: 8,
+        borderRadiusApplication: "end"
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: val => val > 0 ? val + 'h' : ''
+    },
+    yaxis: {
+      labels: {
+        formatter: value => value + 'h'
       },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: "60%",
-          borderRadiusApplication: "end",
-          borderRadius: 8,
-          dataLabels: {
-            position: 'top',
-          }
-        },
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: function(val) {
-          return val > 0 ? val + 'h' : '';
-        },
-        offsetY: 5,
-        style: {
-          fontSize: '11px',
-          colors: ['#ffffff'], 
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: '500'
+      min: 0
+    },
+    grid: chartDefaults.grid,
+    tooltip: {
+      y: {
+        formatter: (value, { dataPointIndex }) => {
+          const item = weeklyData[dataPointIndex];
+          return `${item.y} hours worked on ${item.x}day`;
         }
-      },
-      tooltip: {
-        shared: true,
-        intersect: false,
-        style: {
-          fontFamily: chartDefaults.fontFamily,
-        },
-        y: {
-          formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-            const hours = weeklyData[dataPointIndex].y;
-            const day = weeklyData[dataPointIndex].x;
-            return `${hours} hours worked on ${day}day`;
-          }
-        }
-      },
-      states: {
-        hover: {
-          filter: {
-            type: "lighten",
-            value: 0.1,
-          },
-        },
-      },
-      stroke: {
-        show: false,
-        width: 0,
-        colors: ["transparent"],
-      },
-      grid: chartDefaults.grid,
-      legend: {
-        show: false,
-      },
-      xaxis: {
-        floating: false,
-        labels: {
-          show: true,
-          style: {
-            fontFamily: chartDefaults.fontFamily,
-            fontSize: '12px',
-            colors: '#6B7280'
-          }
-        },
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-      },
-      yaxis: {
-        labels: {
-          style: {
-            fontFamily: chartDefaults.fontFamily,
-            fontSize: '12px',
-            colors: '#6B7280'
-          },
-          formatter: function(value) {
-            return value + 'h';
-          }
-        },
-        min: 0
-      },
-      fill: {
-        opacity: 1,
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            height: 250
-          },
-          plotOptions: {
-            bar: {
-              columnWidth: "80%",
-            },
-          },
-          dataLabels: {
-            enabled: false
-          }
-        }
-      }]
-    };
+      }
+    }
+  };
 
-    const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-    chart.render();
-  } catch (error) {
-    console.error('Failed to initialize weekly chart:', error);
-    showChartError(chartId);
-  }
+  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
+  chart.render();
 }
 
 function initializeTopCategoriesChart() {
   const chartId = 'top-categories-chart';
   const topCategories = window.dashboardData?.topCategories || [];
   
-  showChartLoading(chartId);
-  
   if (topCategories.length === 0) {
     showEmptyChart(chartId, 'No category data available');
     return;
   }
   
-  // Clear the loading state before rendering
-  clearChartContainer(chartId);
-  
-  try {
-    const chartOptions = {
-      series: [{
-        name: "Hours",
-        data: topCategories.map(cat => cat.hours),
-        color: chartDefaults.colors[6]
-      }],
-      chart: {
-        type: "bar",
-        height: 320,
-        fontFamily: chartDefaults.fontFamily,
-        animations: chartDefaults.animations,
-        toolbar: chartDefaults.toolbar
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 6,
-          borderRadiusApplication: "end",
-          horizontal: true,
-          distributed: false,
-          dataLabels: {
-            position: 'top',
-          },
-        },
-      },
-      dataLabels: {
-        enabled: true,
-        textAnchor: 'start',
-        offsetX: -25,
-        style: {
-          colors: ['#ffffff'],
-          fontSize: '11px',
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: '500'
-        },
-        formatter: function(val) {
-          return val > 0 ? val + 'h' : '';
+  const chartOptions = {
+    series: [{
+      name: "Hours",
+      data: topCategories.map(cat => cat.hours),
+      color: chartDefaults.colors[6]
+    }],
+    chart: {
+      type: "bar",
+      height: 320,
+      fontFamily: chartDefaults.fontFamily,
+      animations: chartDefaults.animations,
+      toolbar: chartDefaults.toolbar
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 6,
+        borderRadiusApplication: "end",
+        horizontal: true
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: val => val > 0 ? val + 'h' : ''
+    },
+    xaxis: {
+      categories: topCategories.map(cat => cat.category)
+    },
+    yaxis: {
+      labels: {
+        formatter: val => val.length > 15 ? val.substring(0, 15) + '...' : val
+      }
+    },
+    grid: chartDefaults.grid,
+    tooltip: {
+      y: {
+        formatter: (value, { dataPointIndex }) => {
+          const category = topCategories[dataPointIndex];
+          return `${category.hours} hours total (${category.percentage}% of time)`;
         }
-      },
-      stroke: {
-        width: 0,
-        colors: ["transparent"]
-      },
-      xaxis: {
-        categories: topCategories.map(cat => cat.category),
-        labels: {
-          style: {
-            fontFamily: chartDefaults.fontFamily,
-            fontSize: '12px',
-            colors: '#6B7280'
-          },
-          formatter: function(val) {
-            return val + "h";
-          }
-        },
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        }
-      },
-      yaxis: {
-        labels: {
-          style: {
-            fontFamily: chartDefaults.fontFamily,
-            fontSize: '12px',
-            colors: '#6B7280'
-          },
-          formatter: function(val) {
-            // Truncate long category names for y-axis
-            return val.length > 15 ? val.substring(0, 15) + '...' : val;
-          }
-        }
-      },
-      grid: chartDefaults.grid,
-      tooltip: {
-        style: {
-          fontFamily: chartDefaults.fontFamily,
-        },
-        y: {
-          formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-            const category = topCategories[dataPointIndex];
-            return `${category.hours} hours total (${category.percentage}% of time)`;
-          }
-        }
-      },
-      fill: {
-        opacity: 1,
-      },
-      responsive: [{
-        breakpoint: 480,
-        options: {
-          chart: {
-            height: 250
-          },
-          plotOptions: {
-            bar: {
-              horizontal: true,
-            },
-          },
-          dataLabels: {
-            enabled: false
-          }
-        }
-      }]
-    };
+      }
+    }
+  };
 
-    const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-    chart.render();
-  } catch (error) {
-    console.error('Failed to initialize top categories chart:', error);
-    showChartError(chartId);
-  }
+  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
+  chart.render();
 }
 
 function initializeDashboardCharts() {
-  // Check if dashboard data exists
-  if (!window.dashboardData) {
-    console.warn('Dashboard data not available');
-    return;
-  }
+  if (!window.dashboardData) return;
 
-  const chartConfigs = [
-    { elementId: 'category-pie-chart', initFunction: initializeCategoryChart },
-    { elementId: 'daily-line-chart', initFunction: initializeDailyChart },
-    { elementId: 'weekly-column-chart', initFunction: initializeWeeklyChart },
-    { elementId: 'top-categories-chart', initFunction: initializeTopCategoriesChart }
+  const charts = [
+    { id: 'category-pie-chart', init: initializeCategoryChart },
+    { id: 'daily-line-chart', init: initializeDailyChart },
+    { id: 'weekly-column-chart', init: initializeWeeklyChart },
+    { id: 'top-categories-chart', init: initializeTopCategoriesChart }
   ];
 
-  chartConfigs.forEach(({ elementId, initFunction }) => {
-    if (document.getElementById(elementId)) {
-      try {
-        initFunction();
-      } catch (error) {
-        console.error(`Failed to initialize chart ${elementId}:`, error);
-        showChartError(elementId);
-      }
+  charts.forEach(({ id, init }) => {
+    if (document.getElementById(id)) {
+      init();
     }
   });
 }
@@ -826,4 +441,3 @@ function initializeApplication() {
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeApplication);
-
