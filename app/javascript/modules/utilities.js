@@ -1,9 +1,13 @@
-// Prevent FOUC by making HTML visible after CSS loads
+// ====================================================================
+// FOUC PREVENTION (make html visible after css loads)
+// ====================================================================
 export function initializeFOUCPrevention() {
   document.documentElement.classList.add('loaded');
 }
 
-// Mobile sidebar toggle functionality
+// ====================================================================
+// MOBILE SIDEBAR TOGGLE
+// ====================================================================
 export function initializeMobileSidebar() {
   const sidebarToggle = document.getElementById('toggleSidebarMobile');
   const sidebar = document.getElementById('sidebar');

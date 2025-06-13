@@ -1,3 +1,6 @@
+// ====================================================================
+// DATE FILTER FUNCTIONALITY
+// ====================================================================
 export function initializeDateFilterFunctionality() {
   const applyButton = document.getElementById('apply-filter');
   const startDateInput = document.getElementById('start-datepicker');
@@ -38,6 +41,9 @@ export function initializeDateFilterFunctionality() {
   console.log('Date filter functionality initialized');
 }
 
+// ====================================================================
+// DATE PICKER INITIALIZATION
+// ====================================================================
 export function initializeDatePickers() {
   const startDateEl = document.getElementById('start-datepicker');
   const endDateEl = document.getElementById('end-datepicker');
@@ -88,6 +94,9 @@ export function initializeDatePickers() {
   }
 }
 
+// ====================================================================
+// DATE RANGE VALIDATION
+// ====================================================================
 function validateDateRange() {
   const startDateEl = document.getElementById('start-datepicker');
   const endDateEl = document.getElementById('end-datepicker');

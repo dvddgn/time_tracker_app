@@ -1,5 +1,11 @@
+// ====================================================================
+// IMPORTS
+// ====================================================================
 import { DataTable } from 'simple-datatables'
 
+// ====================================================================
+// TIME LOGS TABLE INITIALIZATION
+// ====================================================================
 export function initializeTimeLogsTable() {
   const tableElement = document.getElementById("time-logs-table");
   
@@ -36,6 +42,9 @@ export function initializeTimeLogsTable() {
   }
 }
 
+// ====================================================================
+// CATEGORIES TABLE INITIALIZATION
+// ====================================================================
 export function initializeCategoriesTable() {
   const tableElement = document.getElementById("categories-table");
   
@@ -70,6 +79,9 @@ export function initializeCategoriesTable() {
   }
 }
 
+// ====================================================================
+// DATATABLES INITIALIZATION
+// ====================================================================
 export function initializeDataTables() {
   initializeTimeLogsTable();
   initializeCategoriesTable();
