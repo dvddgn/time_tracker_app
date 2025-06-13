@@ -1,9 +1,14 @@
+// ====================================================================
+// IMPORTS
+// ====================================================================
 import ApexCharts from 'apexcharts'
 
 // Make ApexCharts available globally
 window.ApexCharts = ApexCharts
 
-// Shared chart configuration
+// ====================================================================
+// CHART DEFAULTS
+// ====================================================================
 const chartDefaults = {
   fontFamily: "Inter, sans-serif",
   colors: ['#1C64F2', '#16BDCA', '#9061F9', '#F05252', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'],
@@ -31,6 +36,9 @@ const chartDefaults = {
   }
 };
 
+// ====================================================================
+// UTILITY FUNCTIONS
+// ====================================================================
 // Empty state helper
 function showEmptyChart(chartId, message = 'No data available') {
   const container = document.getElementById(chartId);
@@ -137,6 +145,9 @@ function createDataFormatter(formatFunction) {
   };
 }
 
+// ====================================================================
+// CHART INITIALIZERS
+// ====================================================================
 export function initializeCategoryChart() {
   const chartId = 'category-pie-chart';
   const categoryData = window.dashboardData?.categoryData || [];
@@ -337,6 +348,9 @@ export function initializeTopCategoriesChart() {
   if (chart) chart.render();
 }
 
+// ====================================================================
+// DASHBOARD INITIALIZATION
+// ====================================================================
 export function initializeDashboardCharts() {
   if (!window.dashboardData) return;
 
