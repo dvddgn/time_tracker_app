@@ -15,6 +15,18 @@
 
 /* ========== MENU FOR CHART DOWNLOAD OPTIONS ========== */
 
+/* Apply font to menu items */
+.apexcharts-menu {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Aptos, Roboto, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.apexcharts-menu-item {
+  font-weight: 500 !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
 /* Apply only in dark mode */
 @media (prefers-color-scheme: dark) {
   .apexcharts-menu {
