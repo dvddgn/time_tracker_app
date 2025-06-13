@@ -22,14 +22,14 @@ import 'flowbite'
 // Import UI utilities
 import { initializeFOUCPrevention, initializeMobileSidebar } from '../modules/utilities'
 
-// Import datepicker functionality
-import { initializeDatePickers, initializeDateFilterFunctionality } from '../modules/datepicker'
-
 // Import datatables functionality
 import { initializeDataTables } from '../modules/tables'
 
 // Import charts functionality
 import { initializeDashboardCharts } from '../modules/charts'
+
+// Import datepicker functionality
+import { initializeDatePickers, initializeDateFilterFunctionality } from '../modules/datepicker'
 
 // Import quick filter functionality
 import { initializeQuickFilter } from '../modules/quick_filter'
@@ -43,15 +43,15 @@ function initializeApplication() {
   initializeFOUCPrevention();
   initializeMobileSidebar();
   
-  // Datepicker Initialization
-  initializeDatePickers();
-  initializeDateFilterFunctionality();
-  
   // Data Tables Initialization
   initializeDataTables();
   
   // Charts Initialization
   initializeDashboardCharts();
+
+  // Datepicker Initialization
+  initializeDatePickers();
+  initializeDateFilterFunctionality();
   
   // Quick Filter Initialization
   initializeQuickFilter();
