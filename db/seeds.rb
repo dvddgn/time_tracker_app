@@ -84,7 +84,7 @@ puts "✅ Created #{categories.length} categories"
 puts "\nGenerating week of time tracking data..."
 
 # Define the work week (Monday to Friday)
-base_date = 1.week.ago.beginning_of_week # Start from last Monday
+base_date = Time.current.beginning_of_week # Start from this week's Monday
 work_days = (0..4).map { |i| base_date + i.days }
 
 # Time tracking patterns for each day
