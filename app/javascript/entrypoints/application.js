@@ -29,6 +29,15 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 import "../../assets/stylesheets/application.css"
 import 'flowbite';
 
+// Import charts functionality
+import { initializeDashboardCharts } from '../modules/charts'
+
+// Import datepicker functionality
+import { initializeDatePickers, initializeDateFilterFunctionality } from '../modules/datepicker'
+
+// Import quick filter functionality
+import { initializeQuickFilter } from '../modules/quick_filter'
+
 // Prevent FOUC by making HTML visible after CSS loads
 document.addEventListener('DOMContentLoaded', function() {
   document.documentElement.classList.add('loaded');
@@ -127,3 +136,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+function initializeApplication() {
+  // Charts Initialization
+  initializeDashboardCharts();
+
+  // Datepicker Initialization
+  initializeDatePickers();
+  initializeDateFilterFunctionality();
+  
+  // Quick Filter Initialization
+  initializeQuickFilter();
+  
+  console.log('Application initialized successfully');
+}
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApplication);

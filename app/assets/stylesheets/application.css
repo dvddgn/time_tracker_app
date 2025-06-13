@@ -10,6 +10,7 @@
  */
  @import "tailwindcss";
  @import "flowbite/src/themes/default";
+ @import "./apex_charts.css";
 
  @plugin "flowbite/plugin";
 
