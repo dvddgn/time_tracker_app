@@ -8,34 +8,7 @@ class ReportsController < ApplicationController
 
   private
 
-  def category_breakdown
-    # Use same date range as daily breakdown
-    start_date = parse_date_param(params[:start_date]) || Date.current.beginning_of_week
-    end_date = parse_date_param(params[:end_date]) || (Date.current.beginning_of_week + 4.days)
-    
-    # Optimized single query with SQL aggregation
-    results = Current.user.time_logs
-      .completed
-      .joins(:category)
-      .where(start_time: start_date.beginning_of_day..end_date.end_of_day)
-      .group('categories.name')
-      .select('categories.name, SUM(ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)) as total_minutes')
-    
-    total_minutes = results.sum(&:total_minutes)
-    
-    results.map do |result|
-      {
-        name: result.name,
-        hours: (result.total_minutes / 60.0).round(1),
-        percentage: calculate_percentage(result.total_minutes, total_minutes),
-        total_minutes: result.total_minutes
-      }
-    end.select { |item| item[:hours] > 0 }
-     .sort_by { |cat| -cat[:hours] }
-  end
-
-  def daily_breakdown
-    # Use date range from params or default to current week (Monday-Friday)
+  def date_range
     start_date = parse_date_param(params[:start_date]) || Date.current.beginning_of_week
     end_date = parse_date_param(params[:end_date]) || (Date.current.beginning_of_week + 4.days)
     
@@ -44,10 +17,47 @@ class ReportsController < ApplicationController
     if date_range > 30
       start_date = end_date - 30.days
     end
-    
-    results = Current.user.time_logs
+
+    [start_date, end_date]
+  end
+
+  def time_logs_in_range
+    start_date, end_date = date_range
+    Current.user.time_logs
       .completed
       .where(start_time: start_date.beginning_of_day..end_date.end_of_day)
+  end
+
+  def calculate_hours(minutes)
+    (minutes / 60.0).round(1)
+  end
+
+  def category_breakdown
+    start_date, end_date = date_range
+    
+    # Optimized single query with SQL aggregation
+    results = time_logs_in_range
+      .joins(:category)
+      .group('categories.name')
+      .select('categories.name, SUM(ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)) as total_minutes')
+    
+    total_minutes = results.sum(&:total_minutes)
+    
+    results.map do |result|
+      {
+        name: result.name,
+        hours: calculate_hours(result.total_minutes),
+        percentage: calculate_percentage(result.total_minutes, total_minutes),
+        total_minutes: result.total_minutes
+      }
+    end.select { |item| item[:hours] > 0 }
+     .sort_by { |cat| -cat[:hours] }
+  end
+
+  def daily_breakdown
+    start_date, end_date = date_range
+    
+    results = time_logs_in_range
       .group("DATE(start_time)")
       .select("DATE(start_time) as log_date, 
                SUM(ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)) as total_minutes,
@@ -62,7 +72,7 @@ class ReportsController < ApplicationController
       {
         day: date.strftime('%A'),
         date: date.strftime('%m/%d'),
-        hours: result ? (result.total_minutes / 60.0).round(1) : 0,
+        hours: result ? calculate_hours(result.total_minutes) : 0,
         entries: result ? result.entry_count : 0,
         timestamp: date.to_time.to_i # For better sorting
       }
@@ -95,8 +105,8 @@ class ReportsController < ApplicationController
     results.map do |result|
       {
         name: result.name,
-        hours: (result.total_minutes / 60.0).round(1),
-        formatted: "#{(result.total_minutes / 60.0).round(1)}h",
+        hours: calculate_hours(result.total_minutes),
+        formatted: "#{calculate_hours(result.total_minutes)}h",
         percentage: calculate_percentage(result.total_minutes, total_minutes)
       }
     end
