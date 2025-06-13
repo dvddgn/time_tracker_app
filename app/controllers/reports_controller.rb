@@ -63,21 +63,20 @@ class ReportsController < ApplicationController
   # ==================================================================
 
   def build_category_breakdown
-    # Single optimized query with SQL aggregation
-    results = @time_logs
+    # Get time logs grouped by category
+    logs_by_category = @time_logs
       .joins(:category)
-      .group('categories.name')
-      .select('categories.name, SUM(ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)) as total_minutes')
+      .includes(:category)
+      .group_by { |log| log.category.name }
     
-    total_minutes = results.sum(&:total_minutes)
-    
-    # Transform results into the format we need
-    category_data = results.map do |result|
+    # Calculate total minutes for each category
+    category_data = logs_by_category.map do |category_name, logs|
+      total_minutes = logs.sum { |log| ((log.end_time - log.start_time) / 60).round }
       {
-        name: result.name,
-        hours: calculate_hours(result.total_minutes),
-        percentage: calculate_percentage(result.total_minutes, total_minutes),
-        total_minutes: result.total_minutes
+        name: category_name,
+        hours: calculate_hours(total_minutes),
+        percentage: calculate_percentage(total_minutes, total_minutes_for_all_categories),
+        total_minutes: total_minutes
       }
     end
     
@@ -88,24 +87,20 @@ class ReportsController < ApplicationController
   end
 
   def build_daily_breakdown
-    # Get aggregated data for each day
+    # Get time logs grouped by date
     results = @time_logs
-      .group("DATE(start_time)")
-      .select("DATE(start_time) as log_date, 
-               SUM(ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)) as total_minutes,
-               COUNT(*) as entry_count")
-      .index_by(&:log_date)
+      .group_by { |log| log.start_time.to_date }
     
     # Generate data for each day in the range (including days with no data)
     (@start_date..@end_date).map do |date|
-      date_key = date.strftime('%Y-%m-%d')
-      result = results[date_key]
+      logs = results[date] || []
+      total_minutes = logs.sum { |log| ((log.end_time - log.start_time) / 60).round }
       
       {
         day: date.strftime('%A'),
         date: date.strftime('%m/%d'),
-        hours: result ? calculate_hours(result.total_minutes) : 0,
-        entries: result ? result.entry_count : 0,
+        hours: calculate_hours(total_minutes),
+        entries: logs.size,
         timestamp: date.to_time.to_i
       }
     end
@@ -113,34 +108,45 @@ class ReportsController < ApplicationController
 
   def build_top_categories
     # Get all-time top categories (not filtered by current date range)
-    results = Current.user.time_logs
+    logs_by_category = Current.user.time_logs
       .completed
       .joins(:category)
-      .group('categories.name')
-      .select('categories.name, SUM(ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)) as total_minutes')
-      .order('total_minutes DESC')
-      .limit(5)
+      .includes(:category)
+      .group_by { |log| log.category.name }
     
-    # Calculate total for percentage calculations
-    total_minutes = Current.user.time_logs
-      .completed
-      .sum('ROUND((julianday(end_time) - julianday(start_time)) * 24 * 60)')
-    
-    # Transform results
-    results.map do |result|
-      hours = calculate_hours(result.total_minutes)
+    # Calculate total minutes for each category
+    category_data = logs_by_category.map do |category_name, logs|
+      total_minutes = logs.sum { |log| ((log.end_time - log.start_time) / 60).round }
+      hours = calculate_hours(total_minutes)
       {
-        name: result.name,
+        name: category_name,
         hours: hours,
         formatted: "#{hours}h",
-        percentage: calculate_percentage(result.total_minutes, total_minutes)
+        percentage: calculate_percentage(total_minutes, total_minutes_for_all_time)
       }
     end
+    
+    # Sort by hours and take top 5
+    category_data
+      .sort_by { |cat| -cat[:hours] }
+      .first(5)
   end
 
   # ==================================================================
   # UTILITY METHODS
   # ==================================================================
+
+  def total_minutes_for_all_categories
+    @total_minutes_for_all_categories ||= @time_logs.sum do |log|
+      ((log.end_time - log.start_time) / 60).round
+    end
+  end
+
+  def total_minutes_for_all_time
+    @total_minutes_for_all_time ||= Current.user.time_logs.completed.sum do |log|
+      ((log.end_time - log.start_time) / 60).round
+    end
+  end
 
   def calculate_hours(minutes)
     (minutes / 60.0).round(1)
