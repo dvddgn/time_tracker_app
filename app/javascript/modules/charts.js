@@ -49,6 +49,17 @@ function showEmptyChart(chartId, message = 'No data available') {
   }
 }
 
+// Utility function for dark mode detection
+function isDarkMode() {
+  return document.documentElement.classList.contains('dark') || 
+         window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+// Utility function to get stroke color based on theme
+function getStrokeColor() {
+  return isDarkMode() ? '#6B7280' : '#ffffff';
+}
+
 export function initializeCategoryChart() {
   const chartId = 'category-pie-chart';
   const categoryData = window.dashboardData?.categoryData || [];
@@ -60,11 +71,6 @@ export function initializeCategoryChart() {
   }
   
   function renderChart() {
-    // Detect dark mode
-    const isDarkMode = document.documentElement.classList.contains('dark') || 
-                      window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const strokeColor = isDarkMode ? '#6B7280' : '#ffffff';
-    
     const chartOptions = {
       series: categoryData.map(cat => cat.hours),
       labels: categoryData.map(cat => cat.name),
@@ -79,7 +85,7 @@ export function initializeCategoryChart() {
       stroke: {
         show: true,
         width: 2,
-        colors: [strokeColor]
+        colors: [getStrokeColor()]
       },
       dataLabels: {
         enabled: true,
@@ -137,11 +143,6 @@ export function initializeDailyChart() {
   }
   
   function renderChart() {
-    // Detect dark mode
-    const isDarkMode = document.documentElement.classList.contains('dark') || 
-                      window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const strokeColor = isDarkMode ? '#6B7280' : '#ffffff';
-    
     const chartOptions = {
       series: [{
         name: "Hours Worked",
@@ -170,7 +171,7 @@ export function initializeDailyChart() {
       markers: {
         size: 6,
         colors: [chartDefaults.colors[0]],
-        strokeColors: strokeColor,
+        strokeColors: getStrokeColor(),
         strokeWidth: 3,
         hover: {
           size: 8
