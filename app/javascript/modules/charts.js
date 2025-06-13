@@ -68,6 +68,21 @@ function getStrokeColor() {
   return isDarkMode() ? '#6B7280' : '#ffffff';
 }
 
+// Utility function to get axis label color based on theme
+function getAxisLabelColor() {
+  return isDarkMode() ? '#9CA3AF' : '#374151';
+}
+
+// Utility function to get consistent axis label style
+function getAxisLabelStyle() {
+  return {
+    colors: getAxisLabelColor(),
+    fontSize: '12px',
+    fontFamily: chartDefaults.fontFamily,
+    fontWeight: 500
+  };
+}
+
 // Utility function to handle theme changes
 function setupThemeChangeListener(renderFunction) {
   // Listen for manual theme changes (class changes on html element)
@@ -214,11 +229,15 @@ export function initializeDailyChart() {
       }],
       stroke: { width: 4, curve: 'smooth' },
       xaxis: {
-        categories: dailyData.map(day => day.day.substring(0, 3))
+        categories: dailyData.map(day => day.day.substring(0, 3)),
+        labels: {
+          style: getAxisLabelStyle()
+        }
       },
       yaxis: {
         labels: {
-          formatter: formatHours
+          formatter: formatHours,
+          style: getAxisLabelStyle()
         },
         min: 0
       },
@@ -279,9 +298,15 @@ export function initializeCategoryOverviewChart() {
       enabled: true,
       formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
     },
+    xaxis: {
+      labels: {
+        style: getAxisLabelStyle()
+      }
+    },
     yaxis: {
       labels: {
-        formatter: formatHours
+        formatter: formatHours,
+        style: getAxisLabelStyle()
       },
       min: 0
     },
@@ -326,13 +351,17 @@ export function initializeTopCategoriesChart() {
       formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
     },
     xaxis: {
-      categories: topCategories.map(cat => cat.name)
+      categories: topCategories.map(cat => cat.name),
+      labels: {
+        style: getAxisLabelStyle()
+      }
     },
     yaxis: {
       labels: {
         formatter: createDataFormatter(val => 
           val.length > 15 ? val.substring(0, 15) + '...' : val
-        )
+        ),
+        style: getAxisLabelStyle()
       }
     },
     tooltip: {
