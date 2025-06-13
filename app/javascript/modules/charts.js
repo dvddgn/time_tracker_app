@@ -99,10 +99,48 @@ function isDataEmpty(data, checkZero = false) {
   return false;
 }
 
+// Utility function to create chart instance
+function createChartInstance(chartId, options) {
+  const container = document.getElementById(chartId);
+  if (!container) return null;
+  
+  return new ApexCharts(container, options);
+}
+
+// Utility function to handle chart rendering
+function renderChartInstance(chartId, options, existingChart = null) {
+  if (existingChart) {
+    existingChart.destroy();
+  }
+  
+  const chart = createChartInstance(chartId, options);
+  if (chart) {
+    chart.render();
+  }
+  return chart;
+}
+
+// Utility function to create tooltip formatter
+function createTooltipFormatter(data, formatFunction) {
+  return function(value, { seriesIndex, dataPointIndex }) {
+    const index = dataPointIndex ?? seriesIndex;
+    if (index === undefined || !data[index]) return '';
+    return formatFunction(data[index], value);
+  };
+}
+
+// Utility function to create chart data formatter
+function createDataFormatter(formatFunction) {
+  return function(value, opts = {}) {
+    if (value === undefined || value === null) return '';
+    return formatFunction(value, opts);
+  };
+}
+
 export function initializeCategoryChart() {
   const chartId = 'category-pie-chart';
   const categoryData = window.dashboardData?.categoryData || [];
-  let chart; // Store chart instance
+  let chart;
   
   if (isDataEmpty(categoryData)) {
     showEmptyChart(chartId, 'No category data available');
@@ -122,31 +160,25 @@ export function initializeCategoryChart() {
       },
       dataLabels: {
         enabled: true,
-        formatter: function(val, opts) {
-          return categoryData[opts.seriesIndex].percentage + '%';
-        }
+        formatter: createDataFormatter((val, opts) => {
+          const index = opts?.seriesIndex;
+          if (index === undefined || !categoryData[index]) return '';
+          return categoryData[index].percentage + '%';
+        })
       },
       legend: { show: false },
       tooltip: {
         y: {
-          formatter: function(value, { seriesIndex }) {
-            const category = categoryData[seriesIndex];
-            return `${category.hours} hours (${category.percentage}%)`;
-          }
+          formatter: createTooltipFormatter(categoryData, (category) => 
+            `${category.hours} hours (${category.percentage}%)`
+          )
         }
       }
     };
 
-    // Destroy existing chart if it exists
-    if (chart) {
-      chart.destroy();
-    }
-    
-    chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-    chart.render();
+    chart = renderChartInstance(chartId, chartOptions, chart);
   }
 
-  // Initial render
   renderChart();
   setupThemeChangeListener(renderChart);
 }
@@ -154,7 +186,7 @@ export function initializeCategoryChart() {
 export function initializeDailyChart() {
   const chartId = 'daily-line-chart';
   const dailyData = window.dashboardData?.dailyData || [];
-  let chart; // Store chart instance
+  let chart;
   
   if (isDataEmpty(dailyData, true)) {
     showEmptyChart(chartId, 'No daily activity data');
@@ -191,27 +223,19 @@ export function initializeDailyChart() {
       },
       tooltip: {
         x: {
-          formatter: (value, { dataPointIndex }) => dailyData[dataPointIndex].day
+          formatter: createTooltipFormatter(dailyData, (dayData) => dayData.day)
         },
         y: {
-          formatter: (value, { dataPointIndex }) => {
-            const dayData = dailyData[dataPointIndex];
-            return `${dayData.hours} hours worked<br/>${dayData.entries} time entries`;
-          }
+          formatter: createTooltipFormatter(dailyData, (dayData) => 
+            `${dayData.hours} hours worked<br/>${dayData.entries} time entries`
+          )
         }
       }
     };
 
-    // Destroy existing chart if it exists
-    if (chart) {
-      chart.destroy();
-    }
-    
-    chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-    chart.render();
+    chart = renderChartInstance(chartId, chartOptions, chart);
   }
 
-  // Initial render
   renderChart();
   setupThemeChangeListener(renderChart);
 }
@@ -220,24 +244,18 @@ export function initializeCategoryOverviewChart() {
   const chartId = 'category-column-chart';
   const categoryOverviewData = window.dashboardData?.categoryOverviewData || [];
   
-  if (categoryOverviewData.length === 0 || categoryOverviewData.every(category => category.y === 0)) {
+  if (isDataEmpty(categoryOverviewData, true)) {
     showEmptyChart(chartId, 'No category overview data');
     return;
   }
   
   const chartOptions = {
+    ...createBaseChartOptions(320, 'bar'),
     series: [{
       name: "Hours",
       data: categoryOverviewData,
       color: chartDefaults.colors[4]
     }],
-    chart: {
-      type: "bar",
-      height: 320,
-      fontFamily: chartDefaults.fontFamily,
-      animations: chartDefaults.animations,
-      toolbar: chartDefaults.toolbar
-    },
     plotOptions: {
       bar: {
         horizontal: false,
@@ -248,51 +266,43 @@ export function initializeCategoryOverviewChart() {
     },
     dataLabels: {
       enabled: true,
-      formatter: val => val > 0 ? val + 'h' : ''
+      formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
     },
     yaxis: {
       labels: {
-        formatter: value => value + 'h'
+        formatter: formatHours
       },
       min: 0
     },
-    grid: chartDefaults.grid,
     tooltip: {
       y: {
-        formatter: (value, { dataPointIndex }) => {
-          const item = categoryOverviewData[dataPointIndex];
-          return `${item.y} hours worked in ${item.x}`;
-        }
+        formatter: createTooltipFormatter(categoryOverviewData, (item) => 
+          `${item.y} hours worked in ${item.x}`
+        )
       }
     }
   };
 
-  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-  chart.render();
+  const chart = createChartInstance(chartId, chartOptions);
+  if (chart) chart.render();
 }
 
 export function initializeTopCategoriesChart() {
   const chartId = 'top-categories-chart';
   const topCategories = window.dashboardData?.topCategories || [];
   
-  if (topCategories.length === 0) {
+  if (isDataEmpty(topCategories)) {
     showEmptyChart(chartId, 'No category data available');
     return;
   }
   
   const chartOptions = {
+    ...createBaseChartOptions(320, 'bar'),
     series: [{
       name: "Hours",
       data: topCategories.map(cat => cat.hours),
       color: chartDefaults.colors[6]
     }],
-    chart: {
-      type: "bar",
-      height: 320,
-      fontFamily: chartDefaults.fontFamily,
-      animations: chartDefaults.animations,
-      toolbar: chartDefaults.toolbar
-    },
     plotOptions: {
       bar: {
         borderRadius: 6,
@@ -302,29 +312,29 @@ export function initializeTopCategoriesChart() {
     },
     dataLabels: {
       enabled: true,
-      formatter: val => val > 0 ? val + 'h' : ''
+      formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
     },
     xaxis: {
       categories: topCategories.map(cat => cat.name)
     },
     yaxis: {
       labels: {
-        formatter: val => val.length > 15 ? val.substring(0, 15) + '...' : val
+        formatter: createDataFormatter(val => 
+          val.length > 15 ? val.substring(0, 15) + '...' : val
+        )
       }
     },
-    grid: chartDefaults.grid,
     tooltip: {
       y: {
-        formatter: (value, { dataPointIndex }) => {
-          const category = topCategories[dataPointIndex];
-          return `${category.hours} hours total (${category.percentage}% of time)`;
-        }
+        formatter: createTooltipFormatter(topCategories, (category) => 
+          `${category.hours} hours total (${category.percentage}% of time)`
+        )
       }
     }
   };
 
-  const chart = new ApexCharts(document.getElementById(chartId), chartOptions);
-  chart.render();
+  const chart = createChartInstance(chartId, chartOptions);
+  if (chart) chart.render();
 }
 
 export function initializeDashboardCharts() {
