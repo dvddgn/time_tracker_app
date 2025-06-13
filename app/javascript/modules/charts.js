@@ -60,6 +60,19 @@ function getStrokeColor() {
   return isDarkMode() ? '#6B7280' : '#ffffff';
 }
 
+// Utility function to handle theme changes
+function setupThemeChangeListener(renderFunction) {
+  // Listen for manual theme changes (class changes on html element)
+  const observer = new MutationObserver(renderFunction);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderFunction);
+}
+
 // Utility function to create base chart options
 function createBaseChartOptions(height, type) {
   return {
@@ -72,19 +85,6 @@ function createBaseChartOptions(height, type) {
     },
     grid: chartDefaults.grid
   };
-}
-
-// Utility function to handle theme changes
-function setupThemeChangeListener(renderFunction) {
-  // Listen for manual theme changes (class changes on html element)
-  const observer = new MutationObserver(renderFunction);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-  
-  // Listen for system theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderFunction);
 }
 
 // Utility function to format hours with label
