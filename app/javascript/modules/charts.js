@@ -273,108 +273,118 @@ export function initializeDailyChart() {
 export function initializeCategoryOverviewChart() {
   const chartId = 'category-column-chart';
   const categoryOverviewData = window.dashboardData?.categoryOverviewData || [];
+  let chart;
   
   if (isDataEmpty(categoryOverviewData, true)) {
     showEmptyChart(chartId, 'No category overview data');
     return;
   }
   
-  const chartOptions = {
-    ...createBaseChartOptions(320, 'bar'),
-    series: [{
-      name: "Hours",
-      data: categoryOverviewData,
-      color: chartDefaults.colors[4]
-    }],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "60%",
-        borderRadius: 8,
-        borderRadiusApplication: "end"
-      }
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
-    },
-    xaxis: {
-      labels: {
-        style: getAxisLabelStyle()
-      }
-    },
-    yaxis: {
-      labels: {
-        formatter: formatHours,
-        style: getAxisLabelStyle()
+  function renderChart() {
+    const chartOptions = {
+      ...createBaseChartOptions(320, 'bar'),
+      series: [{
+        name: "Hours",
+        data: categoryOverviewData,
+        color: chartDefaults.colors[4]
+      }],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "60%",
+          borderRadius: 8,
+          borderRadiusApplication: "end"
+        }
       },
-      min: 0
-    },
-    tooltip: {
-      y: {
-        formatter: createTooltipFormatter(categoryOverviewData, (item) => 
-          `${item.y} hours worked in ${item.x}`
-        )
+      dataLabels: {
+        enabled: true,
+        formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
+      },
+      xaxis: {
+        labels: {
+          style: getAxisLabelStyle()
+        }
+      },
+      yaxis: {
+        labels: {
+          formatter: formatHours,
+          style: getAxisLabelStyle()
+        },
+        min: 0
+      },
+      tooltip: {
+        y: {
+          formatter: createTooltipFormatter(categoryOverviewData, (item) => 
+            `${item.y} hours worked in ${item.x}`
+          )
+        }
       }
-    }
-  };
+    };
 
-  const chart = createChartInstance(chartId, chartOptions);
-  if (chart) chart.render();
+    chart = renderChartInstance(chartId, chartOptions, chart);
+  }
+
+  renderChart();
+  setupThemeChangeListener(renderChart);
 }
 
 export function initializeTopCategoriesChart() {
   const chartId = 'top-categories-chart';
   const topCategories = window.dashboardData?.topCategories || [];
+  let chart;
   
   if (isDataEmpty(topCategories)) {
     showEmptyChart(chartId, 'No category data available');
     return;
   }
   
-  const chartOptions = {
-    ...createBaseChartOptions(320, 'bar'),
-    series: [{
-      name: "Hours",
-      data: topCategories.map(cat => cat.hours),
-      color: chartDefaults.colors[6]
-    }],
-    plotOptions: {
-      bar: {
-        borderRadius: 6,
-        borderRadiusApplication: "end",
-        horizontal: true
+  function renderChart() {
+    const chartOptions = {
+      ...createBaseChartOptions(320, 'bar'),
+      series: [{
+        name: "Hours",
+        data: topCategories.map(cat => cat.hours),
+        color: chartDefaults.colors[6]
+      }],
+      plotOptions: {
+        bar: {
+          borderRadius: 6,
+          borderRadiusApplication: "end",
+          horizontal: true
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
+      },
+      xaxis: {
+        categories: topCategories.map(cat => cat.name),
+        labels: {
+          style: getAxisLabelStyle()
+        }
+      },
+      yaxis: {
+        labels: {
+          formatter: createDataFormatter(val => 
+            val.length > 15 ? val.substring(0, 15) + '...' : val
+          ),
+          style: getAxisLabelStyle()
+        }
+      },
+      tooltip: {
+        y: {
+          formatter: createTooltipFormatter(topCategories, (category) => 
+            `${category.hours} hours total (${category.percentage}% of time)`
+          )
+        }
       }
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: createDataFormatter(val => val > 0 ? formatHours(val) : '')
-    },
-    xaxis: {
-      categories: topCategories.map(cat => cat.name),
-      labels: {
-        style: getAxisLabelStyle()
-      }
-    },
-    yaxis: {
-      labels: {
-        formatter: createDataFormatter(val => 
-          val.length > 15 ? val.substring(0, 15) + '...' : val
-        ),
-        style: getAxisLabelStyle()
-      }
-    },
-    tooltip: {
-      y: {
-        formatter: createTooltipFormatter(topCategories, (category) => 
-          `${category.hours} hours total (${category.percentage}% of time)`
-        )
-      }
-    }
-  };
+    };
 
-  const chart = createChartInstance(chartId, chartOptions);
-  if (chart) chart.render();
+    chart = renderChartInstance(chartId, chartOptions, chart);
+  }
+
+  renderChart();
+  setupThemeChangeListener(renderChart);
 }
 
 // ====================================================================
