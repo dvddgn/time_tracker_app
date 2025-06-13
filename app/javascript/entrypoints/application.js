@@ -31,6 +31,9 @@ import { initializeDataTables } from '../modules/tables'
 // Import charts functionality
 import { initializeDashboardCharts } from '../modules/charts'
 
+// Import quick filter functionality
+import { initializeQuickFilter } from '../modules/quick_filter'
+
 // ====================================================================
 // INITIALIZATION
 // ====================================================================
@@ -49,6 +52,9 @@ function initializeApplication() {
   
   // Charts Initialization
   initializeDashboardCharts();
+  
+  // Quick Filter Initialization
+  initializeQuickFilter();
   
   console.log('Application initialized successfully');
 }
