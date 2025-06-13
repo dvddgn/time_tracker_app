@@ -60,28 +60,61 @@ function getStrokeColor() {
   return isDarkMode() ? '#6B7280' : '#ffffff';
 }
 
+// Utility function to create base chart options
+function createBaseChartOptions(height, type) {
+  return {
+    chart: {
+      height,
+      type,
+      fontFamily: chartDefaults.fontFamily,
+      animations: chartDefaults.animations,
+      toolbar: chartDefaults.toolbar
+    },
+    grid: chartDefaults.grid
+  };
+}
+
+// Utility function to handle theme changes
+function setupThemeChangeListener(renderFunction) {
+  // Listen for manual theme changes (class changes on html element)
+  const observer = new MutationObserver(renderFunction);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', renderFunction);
+}
+
+// Utility function to format hours with label
+function formatHours(hours) {
+  return `${hours}h`;
+}
+
+// Utility function to check if data is empty
+function isDataEmpty(data, checkZero = false) {
+  if (!data || data.length === 0) return true;
+  if (checkZero) return data.every(item => item.hours === 0);
+  return false;
+}
+
 export function initializeCategoryChart() {
   const chartId = 'category-pie-chart';
   const categoryData = window.dashboardData?.categoryData || [];
   let chart; // Store chart instance
   
-  if (categoryData.length === 0) {
+  if (isDataEmpty(categoryData)) {
     showEmptyChart(chartId, 'No category data available');
     return;
   }
   
   function renderChart() {
     const chartOptions = {
+      ...createBaseChartOptions(340, 'pie'),
       series: categoryData.map(cat => cat.hours),
       labels: categoryData.map(cat => cat.name),
       colors: chartDefaults.colors,
-      chart: {
-        height: 340,
-        type: "pie",
-        fontFamily: chartDefaults.fontFamily,
-        animations: chartDefaults.animations,
-        toolbar: chartDefaults.toolbar
-      },
       stroke: {
         show: true,
         width: 2,
@@ -115,21 +148,7 @@ export function initializeCategoryChart() {
 
   // Initial render
   renderChart();
-  
-  // Listen for manual theme changes (class changes on html element)
-  const observer = new MutationObserver(() => {
-    renderChart();
-  });
-  
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-  
-  // Listen for system theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    renderChart();
-  });
+  setupThemeChangeListener(renderChart);
 }
 
 export function initializeDailyChart() {
@@ -137,36 +156,29 @@ export function initializeDailyChart() {
   const dailyData = window.dashboardData?.dailyData || [];
   let chart; // Store chart instance
   
-  if (dailyData.length === 0 || dailyData.every(day => day.hours === 0)) {
+  if (isDataEmpty(dailyData, true)) {
     showEmptyChart(chartId, 'No daily activity data');
     return;
   }
   
   function renderChart() {
     const chartOptions = {
+      ...createBaseChartOptions(320, 'line'),
       series: [{
         name: "Hours Worked",
         data: dailyData.map(day => ({ x: day.day, y: day.hours })),
         color: chartDefaults.colors[0]
       }],
-      chart: {
-        height: 320,
-        type: "line",
-        fontFamily: chartDefaults.fontFamily,
-        animations: chartDefaults.animations,
-        toolbar: chartDefaults.toolbar
-      },
       stroke: { width: 4, curve: 'smooth' },
       xaxis: {
         categories: dailyData.map(day => day.day.substring(0, 3))
       },
       yaxis: {
         labels: {
-          formatter: value => value + 'h'
+          formatter: formatHours
         },
         min: 0
       },
-      grid: chartDefaults.grid,
       dataLabels: { enabled: false },
       markers: {
         size: 6,
@@ -201,21 +213,7 @@ export function initializeDailyChart() {
 
   // Initial render
   renderChart();
-  
-  // Listen for manual theme changes (class changes on html element)
-  const observer = new MutationObserver(() => {
-    renderChart();
-  });
-  
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  });
-  
-  // Listen for system theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    renderChart();
-  });
+  setupThemeChangeListener(renderChart);
 }
 
 export function initializeCategoryOverviewChart() {
