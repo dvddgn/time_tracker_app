@@ -1,0 +1,345 @@
+<% content_for :title, "Dashboard" %>
+
+<div class="p-4 mt-14 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg dark:border-gray-700">
+  <!-- Header Section -->
+  <div class="mb-6">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Time Tracking Dashboard</h1>
+        <p class="text-gray-600 dark:text-gray-400">
+          Insights and analytics for your productivity patterns
+        </p>
+      </div>
+      
+      <!-- Date Range Filter -->
+      <div class="mt-4">
+        <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+          <!-- Quick Filter Dropdown -->
+          <div class="relative inline-block">
+            <button id="quick-filter-button" data-dropdown-toggle="quick-filter-dropdown" 
+                     class="w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center justify-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" 
+                     type="button">
+              <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/>
+              </svg>
+              Quick Filter
+              <svg class="w-2.5 h-2.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div id="quick-filter-dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44 dark:bg-gray-700 absolute mt-1">
+              <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="quick-filter-button">
+                <li>
+                  <a href="#" data-period="this-week" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">This Week</a>
+                </li>
+                <li>
+                  <a href="#" data-period="last-week" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last Week</a>
+                </li>
+                <li>
+                  <a href="#" data-period="this-month" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">This Month</a>
+                </li>
+                <li>
+                  <a href="#" data-period="last-month" class="quick-filter-option block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last Month</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Date Range Group -->
+          <div class="flex items-center space-x-2">
+            <!-- Start Date Picker -->
+            <div class="relative flex-1 min-w-0">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                </svg>
+              </div>
+              <input id="start-datepicker" name="start" type="text" 
+                     class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                     placeholder="Select start date"
+                     value="<%= params[:start_date] || Date.current.beginning_of_week.strftime('%Y-%m-%d') %>">
+            </div>
+            <span class="text-gray-500 dark:text-gray-400 text-sm flex-shrink-0">to</span>
+            <!-- End Date Picker -->
+            <div class="relative flex-1 min-w-0">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                </svg>
+              </div>
+              <input id="end-datepicker" name="end" type="text" 
+                     class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                     placeholder="Select end date"
+                     value="<%= params[:end_date] || (Date.current.beginning_of_week + 4.days).strftime('%Y-%m-%d') %>">
+            </div>
+          </div>
+          <!-- Apply Button -->
+          <button type="button" id="apply-filter" 
+                  class="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Apply Filter
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
+            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-blue-900 dark:text-blue-100">Total Hours</p>
+            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              <%= @category_data.sum { |cat| cat[:hours] } %>h
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-green-100 dark:bg-green-800 rounded-lg">
+            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-green-900 dark:text-green-100">Categories</p>
+            <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+              <%= @category_data.length %>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-purple-100 dark:bg-purple-800 rounded-lg">
+            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-purple-900 dark:text-purple-100">Daily Average</p>
+            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">
+              <%= (@daily_data.sum { |day| day[:hours] } / @daily_data.length.to_f).round(1) %>h
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+        <div class="flex items-center">
+          <div class="p-2 bg-orange-100 dark:bg-orange-800 rounded-lg">
+            <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-orange-900 dark:text-orange-100">Total Entries</p>
+            <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">
+              <%= @daily_data.sum { |day| day[:entries] } %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Grid -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    
+    <!-- Time Distribution Pie Chart -->
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Time Distribution</h5>
+          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">How you spend your working hours</p>
+        </div>
+        <div class="flex items-center flex-shrink-0">
+          <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-blue-900 dark:text-blue-300">
+            <%= @category_data.sum { |cat| cat[:hours] } %> total hours
+          </span>
+        </div>
+      </div>
+      
+      <!-- Pie Chart Container -->
+      <div id="category-pie-chart" class="py-6 flex justify-center items-center"></div>
+      
+      <!-- Category Legend -->
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 overflow-y-auto custom-scrollbar">
+          <div class="space-y-2">
+          <% @category_data.each_with_index do |category, index| %>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-3 h-3 rounded-full mr-2" style="background-color: <%= chart_colors[index % chart_colors.length] %>"></div>
+                <span class="text-sm text-gray-700 dark:text-gray-300"><%= category[:name] %></span>
+              </div>
+              <span class="text-sm font-medium text-gray-900 dark:text-white mr-4">
+                <%= category[:percentage] %>%
+              </span>
+            </div>
+          <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Progress Line Chart -->
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Daily Progress</h5>
+          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours worked each day this week</p>
+        </div>
+        <div class="flex items-center flex-shrink-0">
+          <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+            <% avg_hours = (@daily_data.sum { |day| day[:hours] } / @daily_data.length.to_f).round(1) %>
+            <%= avg_hours %> average daily hours
+          </span>
+        </div>
+      </div>
+      
+      <!-- Line Chart Container -->
+      <div id="daily-line-chart" class="py-6"></div>
+      
+      <!-- Weekly Insights -->
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 flex items-center">
+          <div class="grid grid-cols-2 gap-4 text-center w-full">
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Highest Day</dt>
+              <dd class="leading-tight text-lg font-bold text-green-600 dark:text-green-400">
+                <% highest_day = @daily_data&.max_by { |day| day[:hours] } %>
+                <% if highest_day && highest_day[:hours] > 0 %>
+                  <%= highest_day[:day] %> - <%= highest_day[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
+              </dd>
+            </div>
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Lowest Day</dt>
+              <dd class="leading-tight text-lg font-bold text-blue-600 dark:text-blue-400">
+                <% lowest_day = @daily_data&.min_by { |day| day[:hours] } %>
+                <% if lowest_day && lowest_day[:hours] > 0 %>
+                  <%= lowest_day[:day] %> - <%= lowest_day[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
+              </dd>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Category Overview Column Chart -->
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Category Overview</h5>
+          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Hours spent per category</p>
+        </div>
+        <div class="flex items-center flex-shrink-0">
+          <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-purple-900 dark:text-purple-300">
+            <%= @category_data.length %> categories tracked
+          </span>
+        </div>
+      </div>
+      
+      <!-- Column Chart Container -->
+      <div id="category-column-chart" class="py-6"></div>
+      
+      <!-- Category Insights -->
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 flex items-center">
+          <div class="grid grid-cols-2 gap-4 text-center w-full">
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Most Used</dt>
+              <dd class="leading-tight text-lg font-bold text-green-600 dark:text-green-400">
+                <% most_category = @category_data&.max_by { |cat| cat[:hours] } %>
+                <% if most_category %>
+                  <%= most_category[:name] %> - <%= most_category[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
+              </dd>
+            </div>
+            <div>
+              <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Least Used</dt>
+              <dd class="leading-tight text-lg font-bold text-blue-600 dark:text-blue-400">
+                <% least_category = @category_data&.min_by { |cat| cat[:hours] } %>
+                <% if least_category %>
+                  <%= least_category[:name] %> - <%= least_category[:hours] %>h
+                <% else %>
+                  No data available
+                <% end %>
+              </dd>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Top Categories Horizontal Bar Chart -->
+    <div class="bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
+      <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-2">
+        <div class="flex-1 min-w-0">
+          <h5 class="text-xl font-bold leading-tight text-gray-900 dark:text-white mb-1">Top Categories</h5>
+          <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Most time-intensive activities</p>
+        </div>
+        <div class="flex items-center flex-shrink-0">
+          <span class="bg-orange-100 text-orange-800 text-xs font-medium px-2.5 py-1 rounded-md dark:bg-orange-900 dark:text-orange-300">
+            Top <%= @top_categories.length %> categories
+          </span>
+        </div>
+      </div>
+      
+      <!-- Horizontal Bar Chart Container -->
+      <div id="top-categories-chart" class="py-6"></div>
+      
+      <!-- Category Rankings -->
+      <div class="border-gray-200 border-t dark:border-gray-700 pt-4">
+        <div class="h-32 overflow-y-auto custom-scrollbar">
+          <div class="space-y-2">
+            <% @top_categories.each_with_index do |category, index| %>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="flex items-center justify-center w-6 h-6 bg-gray-100 dark:bg-gray-700 rounded-full mr-3">
+                    <span class="text-xs font-medium text-gray-600 dark:text-gray-300"><%= index + 1 %></span>
+                  </div>
+                  <span class="text-sm font-medium text-gray-900 dark:text-white"><%= category[:name] %></span>
+                </div>
+                <div class="flex items-center space-x-2 mr-4">
+                  <span class="text-sm font-bold text-blue-600 dark:text-blue-400"><%= category[:formatted] %></span>
+                  <div class="w-16 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: <%= (category[:hours] / @top_categories.first[:hours] * 100).round %>%"></div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard Data Script -->
+<script>
+  window.dashboardData = {
+    categoryData: <%= raw @category_data.to_json %>,
+    dailyData: <%= raw @daily_data.to_json %>,
+    categoryOverviewData: <%= raw @category_overview_data.to_json %>,
+    topCategories: <%= raw @top_categories.to_json %>
+  };
+</script>
