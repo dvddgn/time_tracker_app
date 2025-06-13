@@ -60,7 +60,6 @@ export function initializeQuickFilter() {
   const quickFilterOptions = document.querySelectorAll('.quick-filter-option');
   const startDatePicker = document.getElementById('start-datepicker');
   const endDatePicker = document.getElementById('end-datepicker');
-  const applyFilterButton = document.getElementById('apply-filter');
 
   function toggleDropdown() {
     quickFilterDropdown.classList.toggle('hidden');
@@ -85,14 +84,10 @@ export function initializeQuickFilter() {
       const period = this.dataset.period;
       const dateRange = getDateRange(period);
       if (dateRange.start && dateRange.end) {
-        startDatePicker.value = dateRange.start;
-        endDatePicker.value = dateRange.end;
-        const buttonTextNode = quickFilterButton.childNodes[2];
-        if (buttonTextNode && buttonTextNode.nodeType === Node.TEXT_NODE) {
-          buttonTextNode.textContent = this.textContent;
-        }
-        closeDropdown();
-        applyFilterButton.click();
+        const url = new URL(window.location);
+        url.searchParams.set('start_date', dateRange.start);
+        url.searchParams.set('end_date', dateRange.end);
+        window.location.href = url.toString();
       }
     });
   });
@@ -102,27 +97,4 @@ export function initializeQuickFilter() {
       closeDropdown();
     }
   });
-
-  [startDatePicker, endDatePicker].forEach(input => {
-    input.addEventListener('change', function() {
-      const buttonTextNode = quickFilterButton.childNodes[2];
-      if (buttonTextNode && buttonTextNode.nodeType === Node.TEXT_NODE) {
-        buttonTextNode.textContent = 'Quick Filter';
-      }
-      closeDropdown();
-    });
-  });
-
-  if (applyFilterButton) {
-    applyFilterButton.addEventListener('click', function() {
-      const startDate = startDatePicker.value;
-      const endDate = endDatePicker.value;
-      if (startDate && endDate) {
-        const url = new URL(window.location);
-        url.searchParams.set('start_date', startDate);
-        url.searchParams.set('end_date', endDate);
-        window.location.href = url.toString();
-      }
-    });
-  }
 } 
